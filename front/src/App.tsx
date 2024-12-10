@@ -1,35 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import {DefaultApi} from "@noadudai/noaservicescheduling/api";
+import axios from 'axios';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 
-function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+const ax = axios.create({
+    baseURL: `http://localhost:8000/`
+});
+
+
+const api: DefaultApi = new DefaultApi(undefined, undefined, ax);
+const queryClient = new QueryClient()
+
+export const App = () => {
+    return (
+        <QueryClientProvider client={queryClient}>
+            <App2 />
+        </QueryClientProvider>
+    )
 }
 
-export default App
+
+export const App2 = () => {
+    const { isPending, data } = useQuery({
+        queryKey: ['schedules'],
+        queryFn: () =>
+            api.createAndGetScheduleOptionsCreateAndGetScheduleOptionsGet(),
+    })
+
+    console.log(isPending)
+
+    const schedules = data &&
+        data.data.schedules.map((scheduleData) => {return <div>
+            {Object.entries(scheduleData.schedule).map(([shift, employee]) => (
+                <p className="text-black">
+                    {shift}: {employee}
+                </p>))
+            } </div>}
+        );
+
+    return (
+        <div>
+            <h1 className='text-xl text-black'>hello world</h1>
+            <h1 className='text-xl text-black'>getting data: {isPending ? "retrieving" : "data ready"}</h1>
+            {schedules && schedules[0]}
+        </div>
+
+    )
+}
+
+
+
+
+
