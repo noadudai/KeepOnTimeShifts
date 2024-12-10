@@ -12,16 +12,16 @@ const ax = axios.create({
 const api: DefaultApi = new DefaultApi(undefined, undefined, ax);
 const queryClient = new QueryClient()
 
-export const App = () => {
+export const TestingOpenAPITypes = () => {
     return (
         <QueryClientProvider client={queryClient}>
-            <App2 />
+            <CallApiWithAxiosAndUseQuery />
         </QueryClientProvider>
     )
 }
 
 
-export const App2 = () => {
+export const CallApiWithAxiosAndUseQuery = () => {
     const { isPending, data } = useQuery({
         queryKey: ['schedules'],
         queryFn: () =>
