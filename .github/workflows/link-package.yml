@@ -7,9 +7,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Example step
-      - run: echo "Hello, World!"
-
       - name: Checkout code
         uses: actions/checkout@v4
 
