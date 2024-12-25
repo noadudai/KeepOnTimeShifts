@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 
-function ScheduleOptionsNavbar() {
+const ScheduleOptionsNavbar = () => {
     return (
         <div>
             <nav className="bg-indigo-200 border border-indigo-300 rounded-sm shadow-sm">

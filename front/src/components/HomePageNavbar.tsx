@@ -1,6 +1,6 @@
 import LoginButton from "./login.tsx";
 
-function HomePageNavbar() {
+const HomePageNavbar = () => {
 
     return (
         <div>

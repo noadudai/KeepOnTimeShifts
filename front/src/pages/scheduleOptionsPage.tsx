@@ -1,6 +1,6 @@
 import ScheduleOptionsNavbar from "../components/ScheduleOptionsNavbar.tsx";
 
-function ScheduleOptions() {
+const ScheduleOptions = () => {
     return (
         <div>
             <ScheduleOptionsNavbar />
