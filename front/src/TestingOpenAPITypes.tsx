@@ -1,5 +1,4 @@
-import './App.css'
-import {DefaultApi} from "@noadudai/noaservicescheduling/api";
+import {DefaultApi} from "@noadudai/employeesscheduleclient";
 import axios from 'axios';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 

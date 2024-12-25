@@ -23,6 +23,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-/.env
+/front/my_secrets.json
 
-front/.env
+front/my_secrets.json
+
+front/.vite/deps/_metadata.json
