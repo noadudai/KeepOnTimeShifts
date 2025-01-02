@@ -5,10 +5,12 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ScheduleOptionsPage from "./pages/scheduleOptionsPage.tsx";
 import {Auth0Provider} from "@auth0/auth0-react";
 import envs from "../my_envs.json";
+import InfoPage from "./pages/InfoPage.tsx";
 
 const MyRouts = () =>{
     return (
         <Routes>
+            <Route path="info" element={<InfoPage />} />
             <Route path="/" element={<HomePage />} />
             <Route path="schedule-options" element={<ScheduleOptionsPage />} />
         </Routes>
