@@ -1,6 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import envs from "../../my_envs.json";
-import axios from "axios";
+import React, {useEffect} from 'react';
 import {useAuth0} from "@auth0/auth0-react";
 import InfoPageNavBar from "../components/InfoPageNavBar.tsx";
 import {Link} from "react-router-dom";

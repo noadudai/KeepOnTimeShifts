@@ -7,6 +7,7 @@ import {Auth0Provider} from "@auth0/auth0-react";
 import envs from "../my_envs.json";
 import InfoPage from "./pages/InfoPage.tsx";
 
+
 const MyRouts = () =>{
     return (
         <Routes>
