@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useAuth0} from "@auth0/auth0-react";
 import InfoPageNavBar from "../components/InfoPageNavBar.tsx";
 import {Link} from "react-router-dom";
@@ -7,9 +7,6 @@ const InfoPage = () => {
 
     const { loginWithRedirect, isAuthenticated } = useAuth0();
 
-    useEffect(() => {
-
-    }, [isAuthenticated]);
 
     return (
         <div>

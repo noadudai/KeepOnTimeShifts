@@ -2,18 +2,17 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import HomePage from "./pages/HomePage.tsx";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import ScheduleOptionsPage from "./pages/scheduleOptionsPage.tsx";
 import {Auth0Provider} from "@auth0/auth0-react";
-import envs from "../my_envs.json";
 import InfoPage from "./pages/InfoPage.tsx";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
+const queryClient = new QueryClient();
 
 const MyRouts = () =>{
     return (
         <Routes>
             <Route path="info" element={<InfoPage />} />
             <Route path="/" element={<HomePage />} />
-            <Route path="schedule-options" element={<ScheduleOptionsPage />} />
         </Routes>
 
     );
@@ -21,9 +20,11 @@ const MyRouts = () =>{
 
 createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
-        <Auth0Provider domain={envs.envs["REACT_APP_AUTH0_DOMAIN"]} clientId={envs.envs["REACT_APP_AUTH0_CLIENT_ID"]} authorizationParams={{ redirect_uri: envs.envs["REACT_APP_URL"],
-         audience: envs.envs["REACT_APP_AUTH0_AUDIENCE"],}}>
-            <MyRouts />
+        <Auth0Provider domain={"dev-huo4anz1ojy6ggvy.us.auth0.com"} clientId={"XcdHJiAoJoq9CHvgxGPtykyuywWhaa4Y"} authorizationParams={{ redirect_uri: "http://localhost:5173/info/",
+         audience: "https://UsersShiftsApi/",}}>
+            <QueryClientProvider client={queryClient}>
+                <MyRouts />
+            </QueryClientProvider>
         </Auth0Provider>
     </BrowserRouter>
 

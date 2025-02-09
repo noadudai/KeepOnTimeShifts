@@ -1,11 +1,14 @@
 {
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
-    "@noadudai/microserviceservertest": "^12787907250.18.1",
+    "@noadudai/employeesscheduleclient": "^12339696494.65.1",
+    "@noadudai/microserviceservertest": "^13009923894.29.1",
+    "react-calendar": "^5.1.0",
+    "react-date-range": "^2.0.1",
+    "react-datepicker": "^7.6.0",
     "react-router-dom": "^7.0.2"
   },
   "devDependencies": {
-    "@noadudai/microserviceserverclient": "^12778838633.17.1",
     "@types/node": "^22.10.2",
     "dotenv": "^16.4.7"
   }
