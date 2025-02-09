@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
-    "@noadudai/employeesscheduleclient": "^12339696494.65.1",
     "@noadudai/microserviceservertest": "^13009923894.29.1",
     "react-calendar": "^5.1.0",
     "react-date-range": "^2.0.1",

@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import {RedirectLoginOptions} from "@auth0/auth0-react";
 
-const InfoPageNavBar = ({isAuthenticated, loginWithRedirect} : {isAuthenticated: boolean, loginWithRedirect: (options?: RedirectLoginOptions) => Promise<void>}) => {
+export const InfoPageNavBar = ({isAuthenticated, loginWithRedirect} : {isAuthenticated: boolean, loginWithRedirect: (options?: RedirectLoginOptions) => Promise<void>}) => {
 
     const handleLogin = () => {
         loginWithRedirect();
@@ -31,5 +31,3 @@ const InfoPageNavBar = ({isAuthenticated, loginWithRedirect} : {isAuthenticated:
         </div>
     );
 }
-
-export default InfoPageNavBar;

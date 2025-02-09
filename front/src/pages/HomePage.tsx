@@ -1,4 +1,4 @@
-import HomePageNavbar from "../components/HomePageNavbar.tsx";
+import {HomePageNavbar} from "../components/HomePageNavbar.tsx";
 
 
 const HomePage = () => {
