@@ -7,12 +7,8 @@ import InfoPage from "./pages/InfoPage.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
-const auth0Domain = "dev-huo4anz1ojy6ggvy.us.auth0.com";
-const auth0ClientId = "XcdHJiAoJoq9CHvgxGPtykyuywWhaa4Y";
-const auth0Audience = "https://UsersShiftsApi/";
-const infoPageUrl = "http://localhost:5173/info/";
 
-const AppRouts = () =>{
+const AppRoutes = () =>{
     return (
         <Routes>
             <Route path="info" element={<InfoPage />} />
@@ -24,10 +20,10 @@ const AppRouts = () =>{
 
 createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
-        <Auth0Provider domain={auth0Domain} clientId={auth0ClientId} authorizationParams={{ redirect_uri: infoPageUrl,
-         audience: auth0Audience,}}>
+        <Auth0Provider domain={`${import.meta.env.VITE_AUTH0DOMAIN}`} clientId={`${import.meta.env.VITE_AUTH0CLIENTID}`} authorizationParams={{ redirect_uri: `${import.meta.env.VITE_INFOPAGEURL}`,
+         audience: `${import.meta.env.VITE_AUT0AUDIENCE}`,}}>
             <QueryClientProvider client={queryClient}>
-                <AppRouts />
+                <AppRoutes />
             </QueryClientProvider>
         </Auth0Provider>
     </BrowserRouter>

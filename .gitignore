@@ -26,3 +26,5 @@ dist-ssr
 
 
 front/.vite/deps/_metadata.json
+
+front/.env
