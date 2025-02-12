@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@auth0/auth0-react": "^2.2.4",
+    "@noadudai/scheduler-backend-client": "^13263953651.41.1-test",
+    "react-calendar": "^5.1.0",
+    "react-date-range": "^2.0.1",
+    "react-datepicker": "^7.6.0",
+    "react-router-dom": "^7.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "dotenv": "^16.4.7"
+  }
+}
