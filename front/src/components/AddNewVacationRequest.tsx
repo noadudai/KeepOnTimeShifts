@@ -9,47 +9,40 @@ import {DateRangeRequestType} from "@noadudai/scheduler-backend-client";
 const AddNewVacationRequest = ({onClose}: { onClose: () => void }) => {
     const {getAccessTokenSilently} = useAuth0();
 
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [vacationStartDate, setVacationStartDate] = useState('');
+    const [vacationEndDate, setVacationEndDate] = useState('');
 
     const ax = axios.create({
         baseURL: 'http://localhost:5029',
     });
 
-    const addNewUserScheduleRequestApi: AddNewUserScheduleRequestApi = new AddNewUserScheduleRequestApi(undefined, undefined, ax);
+    const userSchedulePreferenceRequestApi: AddNewUserScheduleRequestApi = new AddNewUserScheduleRequestApi(undefined, undefined, ax);
 
-    const addNewScheduleRequestPost = useMutation({
+    const userSchedulePrefReqPostRequest = useMutation({
         mutationFn: async(data: UserDateRangePreferenceRequestModel) =>
         {
             const token = await getAccessTokenSilently();
 
-            console.log(token);
-            console.log("posting");
-            const response = await addNewUserScheduleRequestApi.userSchedulePreferencesRequestDateRangePreferenceRequestPost(data, {
+            const response = await userSchedulePreferenceRequestApi.userSchedulePreferencesRequestDateRangePreferenceRequestPost(data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log("after posting");
-            console.log(response);
 
             return response;
         }
     });
 
     const handleSubmitVacation = () => {
-        console.log("submitting");
-        const startDateDateTime = new Date(startDate.split("/").reverse().join("-"));
-        const endDateDateTime = new Date(endDate.split("/").reverse().join("-"));
+        const startDateDateTime = new Date(vacationStartDate.split("/").reverse().join("-"));
+        const endDateDateTime = new Date(vacationEndDate.split("/").reverse().join("-"));
 
         const data: UserDateRangePreferenceRequestModel = {start_date: startDateDateTime.toISOString(), end_date: endDateDateTime.toISOString(), request_type: DateRangeRequestType.Vacation};
 
-        console.log("data", data);
-
-        addNewScheduleRequestPost.mutate(data);
-        setStartDate('');
-        setEndDate('');
-        console.log("after mutate");
+        userSchedulePrefReqPostRequest.mutate(data);
+        setVacationStartDate('');
+        setVacationEndDate('');
+        
         onClose();
     }
 
@@ -65,15 +58,15 @@ const AddNewVacationRequest = ({onClose}: { onClose: () => void }) => {
                     id="start_date"
                     className="shadow border rounded py-1 px-2 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     placeholder="dd/mm/year"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}/>
+                    value={vacationStartDate}
+                    onChange={(e) => setVacationStartDate(e.target.value)}/>
                 <input
                     type="text"
                     id="end_date"
                     className="shadow border rounded py-1 px-2 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     placeholder="dd/mm/year"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}/>
+                    value={vacationEndDate}
+                    onChange={(e) => setVacationEndDate(e.target.value)}/>
 
                 <div className="flex justify-center space-x-2" onClick={handleSubmitVacation}>
                     <button
