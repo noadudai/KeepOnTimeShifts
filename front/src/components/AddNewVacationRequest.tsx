@@ -35,7 +35,7 @@ const AddNewVacationRequest = ({onClose}: { onClose: () => void }) => {
 
     const handleSubmitVacation = () => {
 
-        const data: UserDateRangePreferenceRequestModel = {start_date: vacationStartDate.toISOString(), end_date: vacationEndDate.toISOString(), request_type: DateRangeRequestType.Vacation};
+        const data: UserDateRangePreferenceRequestModel = {start_date: vacationStartDate, end_date: vacationEndDate, request_type: DateRangeRequestType.Vacation};
 
         userSchedulePrefReqPostRequest.mutate(data);
         setVacationStartDate(null);
@@ -43,7 +43,7 @@ const AddNewVacationRequest = ({onClose}: { onClose: () => void }) => {
         
         onClose();
     }
-    
+
 
     return (
         <div className="flex pt-64 justify-evenly inset-0 bg-opacity-30 backdrop-blur-sm fixed items-center">
