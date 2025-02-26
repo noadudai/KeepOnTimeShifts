@@ -9,11 +9,11 @@ import {DateRangeRequestType} from "@noadudai/scheduler-backend-client";
 const AddNewVacationRequest = ({onClose}: { onClose: () => void }) => {
     const {getAccessTokenSilently} = useAuth0();
 
-    const [vacationStartDate, setVacationStartDate] = useState('');
-    const [vacationEndDate, setVacationEndDate] = useState('');
+    const [vacationStartDate, setVacationStartDate] = useState<Date | null>(null);
+    const [vacationEndDate, setVacationEndDate] = useState<Date | null>(null);
 
     const ax = axios.create({
-        baseURL: 'http://localhost:5029',
+        baseURL: `${import.meta.env.VITE_BACKEND_BASE_URL}`,
     });
 
     const userSchedulePreferenceRequestApi: AddNewUserScheduleRequestApi = new AddNewUserScheduleRequestApi(undefined, undefined, ax);
@@ -34,17 +34,16 @@ const AddNewVacationRequest = ({onClose}: { onClose: () => void }) => {
     });
 
     const handleSubmitVacation = () => {
-        const startDateDateTime = new Date(vacationStartDate.split("/").reverse().join("-"));
-        const endDateDateTime = new Date(vacationEndDate.split("/").reverse().join("-"));
 
-        const data: UserDateRangePreferenceRequestModel = {start_date: startDateDateTime.toISOString(), end_date: endDateDateTime.toISOString(), request_type: DateRangeRequestType.Vacation};
+        const data: UserDateRangePreferenceRequestModel = {start_date: vacationStartDate.toISOString(), end_date: vacationEndDate.toISOString(), request_type: DateRangeRequestType.Vacation};
 
         userSchedulePrefReqPostRequest.mutate(data);
-        setVacationStartDate('');
-        setVacationEndDate('');
+        setVacationStartDate(null);
+        setVacationEndDate(null);
         
         onClose();
     }
+    
 
     return (
         <div className="flex pt-64 justify-evenly inset-0 bg-opacity-30 backdrop-blur-sm fixed items-center">
@@ -54,23 +53,19 @@ const AddNewVacationRequest = ({onClose}: { onClose: () => void }) => {
                     <p>End Date</p>
                 </div>
                 <input
-                    type="text"
+                    type="date"
                     id="start_date"
                     className="shadow border rounded py-1 px-2 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    placeholder="dd/mm/year"
-                    value={vacationStartDate}
-                    onChange={(e) => setVacationStartDate(e.target.value)}/>
+                    onChange={(e) => setVacationStartDate(new Date(e.target.value))}/>
                 <input
-                    type="text"
+                    type="date"
                     id="end_date"
                     className="shadow border rounded py-1 px-2 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    placeholder="dd/mm/year"
-                    value={vacationEndDate}
-                    onChange={(e) => setVacationEndDate(e.target.value)}/>
+                    onChange={(e) => setVacationEndDate(new Date(e.target.value))}/>
 
                 <div className="flex justify-center space-x-2" onClick={handleSubmitVacation}>
-                    <button
-                        className="bg-green-300 text-green-950 font-medium border border-green-950 hover:bg-green-200 hover:text-green-900 px-3 py-2 mx-0.5 rounded-lg">
+                    <button disabled={!(vacationStartDate && vacationEndDate)}
+                        className="disabled:bg-gray-300 disabled:text-gray-950 bg-green-300 text-green-950 font-medium border border-green-950 hover:bg-green-200 hover:text-green-900 px-3 py-2 mx-0.5 rounded-lg">
                         Submit
                     </button>
                 </div>
