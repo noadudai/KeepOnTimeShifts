@@ -41,9 +41,9 @@ const ThisMonthVacations = () => {
         },
     });
 
-    useEffect(() => {
-        handleGetVacationsByDateRange();
-    });
+    // useEffect(() => {
+    //     handleGetVacationsByDateRange();
+    // });
 
     const handleGetVacationsByDateRange = () => {
 

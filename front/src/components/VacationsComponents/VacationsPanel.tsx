@@ -5,7 +5,7 @@ const VacationsPanel = ({onAddNewVacOpenPopup} : {onAddNewVacOpenPopup: () => vo
         <div className="flex justify-between">
             <button
                 className="bg-green-300 text-green-950 font-medium text-xl border hover:bg-green-400 hover:text-green-900 px-4 py-5 rounded-lg">
-                onClick={ThisMonthVacations}
+                {/*onClick={ThisMonthVacations}*/}
                 My Vacations
             </button>
             <button
