@@ -63,8 +63,8 @@ const AddNewVacationRequest = ({onClose}: { onClose: () => void }) => {
                     className="shadow border rounded py-1 px-2 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     onChange={(e) => setVacationEndDate(new Date(e.target.value))}/>
 
-                <div className="flex justify-center space-x-2" onClick={handleSubmitVacation}>
-                    <button disabled={!(vacationStartDate && vacationEndDate)}
+                <div className="flex justify-center space-x-2" >
+                    <button onClick={handleSubmitVacation} disabled={!(vacationStartDate && vacationEndDate)}
                         className="disabled:bg-gray-300 disabled:text-gray-950 bg-green-300 text-green-950 font-medium border border-green-950 hover:bg-green-200 hover:text-green-900 px-3 py-2 mx-0.5 rounded-lg">
                         Submit
                     </button>
