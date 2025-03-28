@@ -8,7 +8,7 @@ import {useAuth0} from "@auth0/auth0-react";
 import {useEffect, useState} from "react";
 import {OneVacationDateRangeModel, UserVacationsResponse} from "@noadudai/scheduler-backend-client";
 
-const ThisMonthVacations = () => {
+const ThisMonthVacations = ({showVacations}: {showVacations: boolean }) => {
     const {getAccessTokenSilently} = useAuth0();
 
     const [vacations, setVacations] = useState<UserVacationsResponse | null>(null);
@@ -41,10 +41,6 @@ const ThisMonthVacations = () => {
         },
     });
 
-    // useEffect(() => {
-    //     handleGetVacationsByDateRange();
-    // });
-
     const handleGetVacationsByDateRange = () => {
 
         const date = new Date();
@@ -56,15 +52,21 @@ const ThisMonthVacations = () => {
         userSchedulePrefReqPostRequest.mutate(dateRangeModel);
     }
 
+    useEffect(() => {
+        if(showVacations) {
+            handleGetVacationsByDateRange();
+        }
+    }, [showVacations]);
+
+
     return (
         <div className="flex flex-wrap gap-2">
-            {/* Map through the vacation date ranges and render each */}
             {vacations?.vacations?.map((range, index) => (
                 <span
                     key={index}
-                    className="bg-yellow-300 text-gray-700 px-4 py-1 rounded-lg"
+                    className="bg-blue-950/10 text-blue-950 px-4 py-1 rounded-lg"
                 >
-              {`${range.startDate} - ${range.endDate}`}
+              {range.startDate === range.endDate ? new Date(range.startDate).toLocaleDateString() : `${new Date(range.startDate).toLocaleDateString()} - ${new Date(range.endDate).toLocaleDateString()}`}
             </span>
             ))}
         </div>
