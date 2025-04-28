@@ -1,5 +1,6 @@
-import ThisMonthVacations from "./ThisMonthVacations.tsx";
+import VacationsByMonth from "./VacationsByMonth.tsx";
 import {useState} from "react";
+import DatePicker from "react-calendar";
 
 const VacationsPanel = ({onAddNewVacOpenPopup} : {onAddNewVacOpenPopup: () => void}) => {
     const [isShowVacations, setIsShowVacationsOpen] = useState<boolean>(false);
@@ -7,7 +8,7 @@ const VacationsPanel = ({onAddNewVacOpenPopup} : {onAddNewVacOpenPopup: () => vo
 
     return (
         <div className="flex flex-col gap-4">
-            {isShowVacations && <div className="order-1"> <ThisMonthVacations showVacations={isShowVacations}/> </div>}
+            {isShowVacations && <div className="order-1"> <VacationsByMonth showVacations={isShowVacations}/> </div>}
             <div className="flex order-2 gap-4">
                 <button
                     className="bg-green-950 text-white font-medium text-xl hover:bg-green-950/90 hover:text-white px-4 py-5 rounded-lg"
@@ -16,7 +17,7 @@ const VacationsPanel = ({onAddNewVacOpenPopup} : {onAddNewVacOpenPopup: () => vo
                 </button>
                 <button
                     className=" bg-green-950/40 text-teal-950 font-medium text-xl hover:bg-green-950/50 px-4 py-5 rounded-lg"
-                    onClick={() => !isShowVacations ? setIsShowVacationsOpen(true) : setIsEditVacations(true)}>
+                    onClick={() => setIsShowVacationsOpen(!isShowVacations)}>
                     {!isShowVacations ? "My Vacations" : "Edit vacations"}
                 </button>
             </div>
