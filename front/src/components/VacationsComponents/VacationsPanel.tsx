@@ -18,7 +18,7 @@ const VacationsPanel = ({onAddNewVacOpenPopup} : {onAddNewVacOpenPopup: () => vo
                 <button
                     className=" bg-green-950/40 text-teal-950 font-medium text-xl hover:bg-green-950/50 px-4 py-5 rounded-lg"
                     onClick={() => setIsShowVacationsOpen(!isShowVacations)}>
-                    {!isShowVacations ? "My Vacations" : "Edit vacations"}
+                    {!isShowVacations ? "My Vacations" : "Hide Vacations"}
                 </button>
             </div>
         </div>
