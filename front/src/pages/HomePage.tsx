@@ -9,7 +9,7 @@ const HomePage = () => {
     const [isAddNewVacOpen, setIsAddNewVacOpen] = useState(false);
 
     return (
-        <div>
+        <div className="relative">
             <HomePageNavbar />
             <div className="grid">
                 <div className="m-20 p-6 border border-gray-200 rounded-lg bg-gray-100">
