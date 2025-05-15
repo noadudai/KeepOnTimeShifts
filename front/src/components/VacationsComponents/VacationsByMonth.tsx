@@ -9,15 +9,15 @@ import {useEffect, useState} from "react";
 import {OneVacationDateRangeModel, UserVacationsResponse} from "@noadudai/scheduler-backend-client";
 import DatePicker from "react-calendar";
 
-const VacationsByMonth = ({showVacations}: {showVacations: boolean }) => {
+const VacationsByMonth = () => {
     const {getAccessTokenSilently} = useAuth0();
 
     const [vacations, setVacations] = useState<UserVacationsResponse | null>(null);
-    const [vacationFilterStartDate, setVacationFilterStartDate] = useState(null);
-    const [vacationFilterEndDate, setVacationFilterEndDate] = useState(null);
+    const [vacationFilterStartDate, setVacationFilterStartDate] = useState<Date | null>(null);
+    const [vacationFilterEndDate, setVacationFilterEndDate] = useState<Date | null>(null);
     const [showStartCalendar, setShowStartCalendar] = useState(false);
     const [showEndCalendar, setShowEndCalendar] = useState(false);
-    const [showFiltering, setShowFiltering] = useState(showVacations);
+    const [showFiltering, setShowFiltering] = useState(false);
 
     const ax = axios.create({
         baseURL: `${import.meta.env.VITE_BACKEND_BASE_URL}`,
@@ -49,15 +49,17 @@ const VacationsByMonth = ({showVacations}: {showVacations: boolean }) => {
 
     const handleGetVacationsByDateRange = () => {
 
-        const date = new Date();
-        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-
-        const dateRangeModel: UserDateRangePreferenceRequestModel = {start_date: firstDay, end_date: lastDay};
+        const dateRangeModel: UserDateRangePreferenceRequestModel = {start_date: vacationFilterStartDate, end_date: vacationFilterEndDate};
 
         userSchedulePrefReqPostRequest.mutate(dateRangeModel);
         setShowFiltering(false)
     }
+
+    useEffect(() => {
+        if (vacations === null) {
+            setShowFiltering(true);
+        }
+    }, [vacations]);
 
 
     return (
@@ -119,7 +121,7 @@ const VacationsByMonth = ({showVacations}: {showVacations: boolean }) => {
                     >
                   {range.startDate === range.endDate ? new Date(range.startDate).toLocaleDateString() : `${new Date(range.startDate).toLocaleDateString()} - ${new Date(range.endDate).toLocaleDateString()}`}
                 </span>
-                ))) : (<span> No vacations yet :) </span>)}
+                ))) : null}
             </div>
         </div>
     )

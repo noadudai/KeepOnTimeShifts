@@ -2,13 +2,11 @@ import {HomePageNavbar} from "../components/HomePageNavbar.tsx";
 import VacationsPanel from "../components/VacationsComponents/VacationsPanel.tsx";
 import {useState} from "react";
 import AddNewVacationRequest from "../components/VacationsComponents/AddNewVacationRequest.tsx";
-import VacationsByMonth from "../components/VacationsComponents/VacationsByMonth.tsx";
 
 
 const HomePage = () => {
 
-    const [isAddNewVacOpen, setIsAddNewVacOpen] = useState(false);
-    const [isShowVacationsOpen, setIsShowVacationsOpen] = useState(false);
+    const [isAddNewVacationOpen, setIsAddNewVacationOpen] = useState(false);
 
     return (
         <div>
@@ -19,13 +17,12 @@ const HomePage = () => {
                     <div className="text-4xl pb-2"> Vacations </div>
                     <div className="rounded-lg p-6 bg-emerald-100/30">
                         <VacationsPanel
-                            onAddNewVacOpenPopup={() => setIsAddNewVacOpen(true)}
-                            onShowVacations={() => setIsShowVacationsOpen(true)}/>
+                            onAddNewVacationOpenPopup={() => setIsAddNewVacationOpen(true)} />
                     </div>
                 </div>
             </div>
-            {isAddNewVacOpen && (
-                <AddNewVacationRequest onClose={() => {setIsAddNewVacOpen(false)}} />
+            {isAddNewVacationOpen && (
+                <AddNewVacationRequest onClose={() => {setIsAddNewVacationOpen(false)}} />
             )}
         </div>
     );
