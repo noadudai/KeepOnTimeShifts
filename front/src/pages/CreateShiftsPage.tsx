@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {CreateShiftsNavbar} from "../components/CreateShiftsNavbar.tsx";
 
 const CreateShiftsPage = () => {
 
@@ -17,7 +18,12 @@ const CreateShiftsPage = () => {
 
     const dates = nextWeeksDayDates.map((date) => <li>{date}</li>);
 
-    return(<ul>{dates}</ul>)
+    return(
+        <div className="relative">
+            <CreateShiftsNavbar />
+            <ul>{dates}</ul>
+        </div>
+    );
 }
 
 export default CreateShiftsPage;
