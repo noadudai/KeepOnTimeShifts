@@ -1,6 +1,6 @@
 import axios from "axios";
 import {
-    AddNewUserScheduleRequestApi,
+    UserScheduleRequestApi,
     UserDateRangePreferenceRequestModel,
 } from "@noadudai/scheduler-backend-client/api.ts";
 import {useMutation} from "@tanstack/react-query";
@@ -9,29 +9,24 @@ import {useEffect, useState} from "react";
 import {OneVacationDateRangeModel, UserVacationsResponse} from "@noadudai/scheduler-backend-client";
 import DatePicker from "react-calendar";
 
-const VacationsByMonth = () => {
+const VacationsByMonth = (isVacationAdded: boolean) => {
     const {getAccessTokenSilently} = useAuth0();
 
     const [vacations, setVacations] = useState<UserVacationsResponse | null>(null);
-    const [vacationFilterStartDate, setVacationFilterStartDate] = useState<Date | null>(null);
-    const [vacationFilterEndDate, setVacationFilterEndDate] = useState<Date | null>(null);
-    const [showStartCalendar, setShowStartCalendar] = useState(false);
-    const [showEndCalendar, setShowEndCalendar] = useState(false);
-    const [showFiltering, setShowFiltering] = useState(false);
 
     const ax = axios.create({
         baseURL: `${import.meta.env.VITE_BACKEND_BASE_URL}`,
     });
 
-    const userSchedulePreferenceRequestApi: AddNewUserScheduleRequestApi = new AddNewUserScheduleRequestApi(undefined, undefined, ax);
+    const userSchedulePreferenceRequestApi: UserScheduleRequestApi = new UserScheduleRequestApi(undefined, undefined, ax);
 
     const userSchedulePrefReqPostRequest = useMutation({
-        mutationFn: async (data: UserDateRangePreferenceRequestModel) =>
+        mutationFn: async () =>
         {
             const token = await getAccessTokenSilently();
 
 
-            const response = await userSchedulePreferenceRequestApi.userSchedulePreferencesRequestVacationsByDateRangePost(data, {
+            const response = await userSchedulePreferenceRequestApi.userSchedulePreferencesRequestVacationsByDateRangePost({
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -47,72 +42,19 @@ const VacationsByMonth = () => {
         },
     });
 
-    const handleGetVacationsByDateRange = () => {
-
-        const dateRangeModel: UserDateRangePreferenceRequestModel = {start_date: vacationFilterStartDate, end_date: vacationFilterEndDate};
-
-        userSchedulePrefReqPostRequest.mutate(dateRangeModel);
-        setShowFiltering(false)
+    const handleGetVacations = () => {
+        userSchedulePrefReqPostRequest.mutate();
     }
 
     useEffect(() => {
         if (vacations === null) {
-            setShowFiltering(true);
+            handleGetVacations();
         }
-    }, [vacations]);
+    }, [isVacationAdded]);
 
 
     return (
         <div>
-            {showFiltering &&
-                <div className="flex items-center justify-evenly w-full">
-                    <div className="relative w-64">
-                        <input
-                            type="text"
-                            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                            value={vacationFilterStartDate ? vacationFilterStartDate.toLocaleDateString() : ''}
-                            placeholder="My vacations from"
-                            onClick={() => setShowStartCalendar(true)} // Show calendar on input click
-                        />
-                        {showStartCalendar && (
-                            <div
-                                className="calendar-container absolute mt-2 z-10 bg-emerald-800 border shadow-md rounded-md w-64 p-2 text-emerald-50">
-                                <DatePicker
-                                    selected={vacationFilterStartDate}
-                                    onChange={(date) => {
-                                        setVacationFilterStartDate(date);
-                                        setShowStartCalendar(false);
-                                    }}
-                                    popperPlacement="bottom"
-                                />
-                            </div>
-                        )}
-                    </div>
-                    <div className="relative w-64">
-                        <input
-                            type="text"
-                            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                            value={vacationFilterEndDate ? vacationFilterEndDate.toLocaleDateString() : ''}
-                            placeholder="To"
-                            onClick={() => setShowEndCalendar(true)} // Show calendar on input click
-                        />
-                        {showEndCalendar && (
-                            <div
-                                className="calendar-container absolute mt-2 z-10 bg-emerald-800 border shadow-md rounded-md w-64 p-2 text-emerald-50">
-                                <DatePicker
-                                    selected={vacationFilterEndDate}
-                                    onChange={(date) => {
-                                        setVacationFilterEndDate(date);
-                                        setShowEndCalendar(false);
-                                    }}
-                                    popperPlacement="bottom"
-                                />
-                            </div>
-                        )}
-                    </div>
-                    <button className=" bg-green-950/40 text-teal-950 font-medium text-xl hover:bg-green-950/50 px-4 py-5 rounded-lg" onClick={handleGetVacationsByDateRange}  > See vacations! </button>
-                </div>
-            }
             <div className="flex flex-wrap gap-2">
                 {vacations ? (vacations?.vacations?.map((range, index) => (
                     <span

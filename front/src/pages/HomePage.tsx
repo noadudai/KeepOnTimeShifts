@@ -17,7 +17,9 @@ const HomePage = () => {
                     <div className="text-4xl pb-2"> Vacations </div>
                     <div className="rounded-lg p-6 bg-emerald-100/30">
                         <VacationsPanel
-                            onAddNewVacationOpenPopup={() => setIsAddNewVacationOpen(true)} />
+                            onAddNewVacationOpenPopup= {() => setIsAddNewVacationOpen(true)}
+                            isVacationAdded={isAddNewVacationOpen}
+                        />
                     </div>
                 </div>
             </div>
