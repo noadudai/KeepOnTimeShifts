@@ -1,24 +1,17 @@
 import {HomePageNavbar} from "../components/HomePageNavbar.tsx";
-import VacationsPanel from "../components/VacationsPanel.tsx";
-import {useState} from "react";
-import AddNewVacationRequest from "../components/AddNewVacationRequest.tsx";
+import VacationsPanel from "../components/UserVacationsComponent/VacationsPanel.tsx";
 
 
 const HomePage = () => {
 
-    const [isAddNewVacOpen, setIsAddNewVacOpen] = useState(false);
-
     return (
         <div>
             <HomePageNavbar />
-            <div className="grid">
-                <div className="m-20 p-6 border border-gray-200 rounded-lg bg-gray-100">
-                    <VacationsPanel onAddNewVacOpenPopup={() => setIsAddNewVacOpen(true)} />
+            <div className="grid justify-items-center">
+                <div className="w-2/3 m-20 rounded-xl bg-white">
+                    <VacationsPanel />
                 </div>
             </div>
-            {isAddNewVacOpen && (
-                <AddNewVacationRequest onClose={() => {setIsAddNewVacOpen(false)}} />
-            )}
         </div>
     );
 }
