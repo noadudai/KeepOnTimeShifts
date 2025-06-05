@@ -1,9 +1,10 @@
 import {useState} from "react";
-import AddNewVacationRequest from "./AddNewVacationRequest.tsx";
+import VacationRequestForm from "./VacationRequestForm.tsx";
 import { IoIosAdd, IoMdTime } from "react-icons/io";
 import { IoBan } from "react-icons/io5";
 import { BiCheckCircle } from "react-icons/bi";
-import ShowUserVacations from "./ShowUserVacations.tsx";
+import UserVacationsPage from "./UserVacationsPage.tsx";
+import RequestStatusLabel from "../RequestStatusLabel.tsx";
 
 
 const VacationsPanel = () => {
@@ -13,31 +14,21 @@ const VacationsPanel = () => {
     return (
         <div className="">
             <h1 className="flex justify-center text-2xl font-opensans">My Vacations</h1>
-            <ShowUserVacations />
+            <UserVacationsPage />
             <div className="flex justify-between ">
                 <div className="place-self-start flex gap-1 p-2">
-                    <div className="flex items-center bg-costume-pastel-green text-xs text-black gap-2 rounded-xl p-2">
-                        <BiCheckCircle size={20}/>
-                        <h1 className="font-opensans">Approved</h1>
-                    </div>
-                    <div className="flex items-center bg-costume-soft-blue text-xs text-black gap-2 rounded-xl p-2">
-                        <IoMdTime size={20}/>
-                        <h1 className="font-opensans">Pending</h1>
-                    </div>
-                    <div
-                        className="flex items-center bg-costume-warm-coral-pink text-xs text-black gap-2 rounded-xl p-2">
-                        <IoBan size={18}/>
-                        <h1 className="font-opensans">Denied</h1>
-                    </div>
+                    <RequestStatusLabel status={"Approved"} backgroundColor={"custom-pastel-green"} icon={BiCheckCircle} />
+                    <RequestStatusLabel status={"Pending"} backgroundColor={"custom-soft-blue"} icon={IoMdTime} />
+                    <RequestStatusLabel status={"Denied"} backgroundColor={"custom-warm-coral-pink"} icon={IoBan} />
                 </div>
                 <button
-                    className="bg-costume-soft-blue text-custom-cream rounded-full mb-2 mr-2"
+                    className="bg-custom-soft-blue text-custom-cream rounded-full mb-2 mr-2"
                     onClick={() => setIsAddNewVacOpen(true)}>
                     <IoIosAdd size={45}/>
                 </button>
             </div>
             {isAddNewVacOpen && (
-                <AddNewVacationRequest onClose={() => {
+                <VacationRequestForm onClose={() => {
                     setIsAddNewVacOpen(false)
                 }}/>
             )}

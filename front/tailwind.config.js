@@ -7,10 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        'costume-pastel-green' : '#A0C878',
-        'costume-cream' : '#FFFDF6',
-        'costume-soft-blue' : '#7794B8',
-        'costume-warm-coral-pink' : '#E57B73',
+        'custom-pastel-green' : '#A0C878',
+        'custom-cream' : '#FFFDF6',
+        'custom-soft-blue' : '#7794B8',
+        'custom-warm-coral-pink' : '#E57B73',
       },
       fontFamily: {
         opensans: ['Open Sans', 'sans-serif'],

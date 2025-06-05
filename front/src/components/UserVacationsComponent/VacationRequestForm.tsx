@@ -1,51 +1,27 @@
 import {useState} from 'react';
-import {useAuth0} from "@auth0/auth0-react";
-import {UserScheduleRequestApi} from "@noadudai/scheduler-backend-client/api.ts"
-import axios from "axios";
-import {useMutation} from "@tanstack/react-query";
 import {UserDateRangePreferenceRequestModel} from "@noadudai/scheduler-backend-client/api.ts";
 import {DateRangeRequestType} from "@noadudai/scheduler-backend-client";
 import { IoIosCheckmark } from "react-icons/io";
+import {useUserDateRangePreferenceRequest} from "../../apis.ts";
 
 
-const AddNewVacationRequest = ({onClose}: { onClose: () => void }) => {
-    const {getAccessTokenSilently} = useAuth0();
+const VacationRequestForm = ({onClose}: { onClose: () => void }) => {
 
     const [vacationStartDate, setVacationStartDate] = useState<Date | null>(null);
     const [vacationEndDate, setVacationEndDate] = useState<Date | null>(null);
 
-    const ax = axios.create({
-        baseURL: `${import.meta.env.VITE_BACKEND_BASE_URL}`,
-    });
-
-    const userSchedulePreferenceRequestApi: UserScheduleRequestApi = new UserScheduleRequestApi(undefined, undefined, ax);
-
-    const userSchedulePrefReqPostRequest = useMutation({
-        mutationFn: async(data: UserDateRangePreferenceRequestModel) =>
-        {
-            const token = await getAccessTokenSilently();
-
-            const response = await userSchedulePreferenceRequestApi.userSchedulePreferencesRequestDateRangePreferenceRequestPost(data, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            return response;
-        }
-    });
+    const mutation = useUserDateRangePreferenceRequest();
 
     const handleSubmitVacation = () => {
 
         const data: UserDateRangePreferenceRequestModel = {start_date: vacationStartDate, end_date: vacationEndDate, request_type: DateRangeRequestType.Vacation};
 
-        userSchedulePrefReqPostRequest.mutate(data);
+        mutation.mutate(data);
         setVacationStartDate(null);
         setVacationEndDate(null);
         
         onClose();
     }
-
 
     return (
         <div className="flex pt-64 justify-evenly inset-0 bg-opacity-30 backdrop-blur-sm fixed items-center">
@@ -67,7 +43,7 @@ const AddNewVacationRequest = ({onClose}: { onClose: () => void }) => {
 
                 <div className="flex justify-center space-x-2 p-3" onClick={handleSubmitVacation}>
                     <button disabled={!(vacationStartDate && vacationEndDate)}
-                        className="disabled:bg-gray-300 disabled:text-gray-950 bg-costume-pastel-green text-black  rounded-full">
+                        className="disabled:bg-gray-300 disabled:text-gray-950 bg-custom-pastel-green text-black  rounded-full">
                         <IoIosCheckmark size={40} />
                     </button>
                 </div>
@@ -76,4 +52,4 @@ const AddNewVacationRequest = ({onClose}: { onClose: () => void }) => {
     )
 };
 
-export default AddNewVacationRequest;
+export default VacationRequestForm;

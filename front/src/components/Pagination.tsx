@@ -1,11 +1,7 @@
 const Pagination = ({ itemsPerPage, totalItems, currentPage, onPageChange }: {itemsPerPage: number, totalItems: number, currentPage: number, onPageChange: (number: number) => void}) => {
 
-    const pageNumbers = [];
     const numberOfPages = Math.ceil(totalItems / itemsPerPage);
-
-    for (let i = 1; i <= numberOfPages; i++) {
-        pageNumbers.push(i);
-    }
+    const pageNumbers = Array.from({length: numberOfPages}, (_, i) => i + 1);
 
     return (
         <div className="">
@@ -18,8 +14,8 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, onPageChange }: {it
                             }}
                             href="#"
                             className={currentPage === number ?
-                                "text-costume-cream bg-amber-100 flex rounded-full p-2 mr-1.5 " :
-                                "text-costume-cream bg-gray-300 flex hover:bg-gray-200 rounded-full p-2 mr-1.5"}
+                                "text-custom-cream bg-amber-100 flex rounded-full p-2 mr-1.5 " :
+                                "text-custom-cream bg-gray-300 flex hover:bg-gray-200 rounded-full p-2 mr-1.5"}
                         >
                         </a>
                     </li>

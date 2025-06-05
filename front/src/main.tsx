@@ -23,7 +23,7 @@ createRoot(document.getElementById('root')!).render(
         <Auth0Provider domain={`${import.meta.env.VITE_AUTH0DOMAIN}`} clientId={`${import.meta.env.VITE_AUTH0CLIENTID}`} authorizationParams={{ redirect_uri: `${import.meta.env.VITE_INFOPAGEURL}`,
          audience: `${import.meta.env.VITE_AUT0AUDIENCE}`,}}>
             <QueryClientProvider client={queryClient}>
-                <div className="min-h-screen bg-costume-cream">
+                <div className="min-h-screen bg-custom-cream">
                     <AppRoutes/>
                 </div>
             </QueryClientProvider>
