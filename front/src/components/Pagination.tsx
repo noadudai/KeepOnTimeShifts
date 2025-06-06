@@ -4,7 +4,7 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, onPageChange }: {it
     const pageNumbers = Array.from({length: numberOfPages}, (_, i) => i + 1);
 
     return (
-        <div className="">
+        <div>
             <ul className='flex justify-center'>
                 {pageNumbers.map((number) => (
                     <li key={number}>
