@@ -2,11 +2,11 @@ import {HiOutlinePencil} from "react-icons/hi";
 import {IoTrashOutline} from "react-icons/io5";
 import {UserVacationModel} from "@noadudai/scheduler-backend-client/api.ts";
 
-const UserVacationsPane = ({paneVacations} : {paneVacations: UserVacationModel[]}) => {
+const UserVacationsPane = ({paneVacations} : {paneVacations: UserVacationModel[] | undefined}) => {
 
     return (
         <div className="flex flex-wrap justify-normal items-center gap-6 p-6">
-            {paneVacations.map((range, index) => (
+            {paneVacations ? paneVacations.map((range, index) => (
                 <div
                     key={index}
                     className="flex justify-between bg-custom-soft-blue text-black p-2 gap-2 rounded-lg w-64 font-opensans"
@@ -23,7 +23,7 @@ const UserVacationsPane = ({paneVacations} : {paneVacations: UserVacationModel[]
                         </button>
                     </div>
                 </div>
-            ))}
+            )) : <p>Loading vacations</p>}
         </div>
     );
 };

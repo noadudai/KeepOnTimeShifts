@@ -13,7 +13,7 @@ const UserVacationsPage = () => {
     const vacations = useQueryCurrentUserFutureVacations();
     const indexVacationPage = (currentPage - 1) * itemsPerPage;
 
-    const paneVacations: UserVacationModel[] = vacations.data?.vacations?.slice(indexVacationPage, indexVacationPage + itemsPerPage) || [];
+    const paneVacations: UserVacationModel[] | undefined = vacations.data?.vacations?.slice(indexVacationPage, indexVacationPage + itemsPerPage);
 
     const changePage = (pageNumber: number) => {
         setCurrentPage(pageNumber)
