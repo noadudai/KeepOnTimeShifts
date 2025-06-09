@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {CreateShiftsNavbar} from "../components/CreateShiftsNavbar.tsx";
+import {AdminsPanelNavbar} from "../components/AdminsPanelNavbar.tsx";
 import { IoMdTime } from "react-icons/io";
 import CreateShiftsPanel from "../components/CreateShiftsPanel.tsx";
 
@@ -8,12 +8,12 @@ const AdminPage = () => {
 
     return (
         <div>
-            <CreateShiftsNavbar/>
+            <AdminsPanelNavbar/>
             <div className="grid justify-items-center p-4">
                 <h1 className="text-black text-4xl">Hello Manager</h1>
                 <div className="w-2/3 m-20 rounded-xl bg-white">
                     <button
-                        className="border-4 border-yellow-200 rounded-xl p-6 gap-4 flex flex-col items-center justify-center"
+                        className="border-4 border-red-300 rounded-xl p-6 gap-4 flex flex-col items-center justify-center"
                         onClick={() => setIsCreateNewShiftsModalOpen(true)}
                     >
                         <p className="text-black font-semibold">Next Week's Shifts</p>

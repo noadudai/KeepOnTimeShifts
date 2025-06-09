@@ -1,4 +1,5 @@
 import React from 'react';
+import { IoIosCheckmark } from "react-icons/io";
 
 const CreateShiftsPanel = ({onClose}: { onClose: () => void }) => {
     const nextWeeksDayDates: string[] = []
@@ -14,7 +15,7 @@ const CreateShiftsPanel = ({onClose}: { onClose: () => void }) => {
         nextWeeksDayDates.push(dayInNextWeek.toDateString());
     }
 
-    const dates = nextWeeksDayDates.map((date) => <div className="flex items-center justify-center bg-lime-300 rounded-xl p-2 text-xs">{date}</div>);
+    const dates = nextWeeksDayDates.map((date) => <div className="flex items-center justify-center bg-lime-300 rounded-xl p-4 w-20">{date.slice(0,4)}</div>);
     // <ul>{dates}</ul>
 
     return (
@@ -26,7 +27,14 @@ const CreateShiftsPanel = ({onClose}: { onClose: () => void }) => {
                     </h1>
                 </div>
                 <div className="p-2 flex items-center justify-center">
-                    <div className="flex flex-row gap-2 ">{dates}</div>
+                    <div className="flex flex-row gap-4 ">{dates}</div>
+                </div>
+                <div className="flex items-center justify-center p-6">
+                    <button
+                        className="bg-lime-300 bg-custom-pastel-green text-black rounded-xl"
+                        onClick={onClose}>
+                        <IoIosCheckmark size={40}/>
+                    </button>
                 </div>
             </div>
         </div>

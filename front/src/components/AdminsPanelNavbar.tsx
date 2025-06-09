@@ -1,6 +1,9 @@
 import {Link} from "react-router-dom";
+import {useAuth0} from "@auth0/auth0-react";
+import { FaRegUserCircle } from "react-icons/fa";
 
-export const CreateShiftsNavbar = () => {
+export const AdminsPanelNavbar = () => {
+    const { logout } = useAuth0();
 
     return (
         <div>
@@ -16,8 +19,12 @@ export const CreateShiftsNavbar = () => {
                     <div className="flex items-center pl-8 p-2 shadow-sms">
                         <Link to="/" className="text-4xl text-green-950">Keep On Time Shifts</Link>
                     </div>
-                    <div>
-                        <h1>Employee's name</h1>
+                    <div className="flex items-center gap-2 p-2 justify-between">
+                        <h1>Name</h1>
+                        <button onClick={() => logout({returnTo: "http://localhost:5173/info/"})}
+                                className="text-custom-cream2 rounded-lg">
+                            <FaRegUserCircle size={25}/>
+                        </button>
                     </div>
                 </div>
             </nav>
