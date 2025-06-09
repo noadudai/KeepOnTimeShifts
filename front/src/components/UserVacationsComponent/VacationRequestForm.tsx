@@ -10,8 +10,10 @@ const VacationRequestForm = ({onClose}: { onClose: () => void }) => {
     const [vacationStartDate, setVacationStartDate] = useState<Date | null>(null);
     const [vacationEndDate, setVacationEndDate] = useState<Date | null>(null);
 
-    const mutation = useUserDateRangePreferenceRequest({reSettingVacationRequestFormStartDate:() => setVacationStartDate(null),
-        reSettingVacationRequestFormEndDate: () => setVacationEndDate(null)});
+    const mutation = useUserDateRangePreferenceRequest({onSuccessCallback:() => {
+        setVacationStartDate(null);
+        setVacationEndDate(null);
+    }});
 
     const handleSubmitVacation = () => {
 

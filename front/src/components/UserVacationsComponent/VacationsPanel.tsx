@@ -17,9 +17,9 @@ const VacationsPanel = () => {
             <UserVacationsPage />
             <div className="flex justify-between ">
                 <div className="place-self-start flex gap-1 p-2">
-                    <RequestStatusLabel status={"Approved"} backgroundColor={"custom-pastel-green"} icon={BiCheckCircle} />
-                    <RequestStatusLabel status={"Pending"} backgroundColor={"custom-soft-blue"} icon={IoMdTime} />
-                    <RequestStatusLabel status={"Denied"} backgroundColor={"custom-warm-coral-pink"} icon={IoBan} />
+                    <RequestStatusLabel status={"Approved"} backgroundColor={'bg-custom-pastel-green'} icon={BiCheckCircle} />
+                    <RequestStatusLabel status={"Pending"} backgroundColor={'bg-custom-soft-blue'} icon={IoMdTime} />
+                    <RequestStatusLabel status={"Denied"} backgroundColor={'bg-custom-warm-coral-pink'} icon={IoBan} />
                 </div>
                 <button
                     className="bg-custom-soft-blue text-custom-cream rounded-full mb-2 mr-2"

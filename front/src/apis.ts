@@ -34,8 +34,8 @@ export const useQueryCurrentUserFutureVacations = () => {
 }
 
 
-export const useUserDateRangePreferenceRequest = ({reSettingVacationRequestFormStartDate, reSettingVacationRequestFormEndDate}:
-                                                  {reSettingVacationRequestFormStartDate: () => void, reSettingVacationRequestFormEndDate: () => void}) => {
+export const useUserDateRangePreferenceRequest = ({onSuccessCallback}:
+                                                  {onSuccessCallback: () => void}) => {
     const {getAccessTokenSilently} = useAuth0();
     const queryClient = useQueryClient()
 
@@ -52,9 +52,8 @@ export const useUserDateRangePreferenceRequest = ({reSettingVacationRequestFormS
             return response;
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['userFutureVacations'] })
-            reSettingVacationRequestFormStartDate();
-            reSettingVacationRequestFormEndDate();
+            queryClient.invalidateQueries({ queryKey: ['userFutureVacations'] });
+            onSuccessCallback();
         }
     });
 }
