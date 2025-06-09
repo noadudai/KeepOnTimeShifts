@@ -1,11 +1,9 @@
 import axios from "axios";
 import {
     UserDateRangePreferenceRequestModel,
-    UserScheduleRequestApi,
-    UserVacationsResponse
+    UserScheduleRequestApi
 } from "@noadudai/scheduler-backend-client/api.ts";
-import {useMutation, useQuery} from "@tanstack/react-query";
-import {GetUserFutureVacationsPaginationModel} from "@noadudai/scheduler-backend-client";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {useAuth0} from "@auth0/auth0-react";
 
 
@@ -16,17 +14,15 @@ const ax = axios.create({
 const api = new UserScheduleRequestApi(undefined, undefined, ax);
 
 
-export const useQueryCurrentUserFutureVacations = (onSuccess: (data: UserVacationsResponse) => void,
-                                                   onError?: (error) => void) => {
+export const useQueryCurrentUserFutureVacations = () => {
     const {getAccessTokenSilently} = useAuth0();
 
-
-    return useMutation({
-        mutationFn: async (data : GetUserFutureVacationsPaginationModel) =>
-        {
+    return useQuery({
+        queryKey: ["userFutureVacations"],
+        queryFn: async () => {
             const token = await getAccessTokenSilently();
 
-            const response = await api.userSchedulePreferencesRequestGetFutureVacationsPost(data, {
+            const response = await api.userSchedulePreferencesRequestGetFutureVacationsPost({
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -34,14 +30,13 @@ export const useQueryCurrentUserFutureVacations = (onSuccess: (data: UserVacatio
 
             return response.data;
         },
-        onSuccess,
-        onError,
     });
 }
 
 
 export const useUserDateRangePreferenceRequest = () => {
     const {getAccessTokenSilently} = useAuth0();
+    const queryClient = useQueryClient()
 
     return useMutation({
         mutationFn: async (data: UserDateRangePreferenceRequestModel) => {
@@ -54,27 +49,10 @@ export const useUserDateRangePreferenceRequest = () => {
             });
 
             return response;
-        }
-    });
-}
-
-
-
-export const useCurrentUserFutureVacationsCount = (currentPage: number) => {
-    const {getAccessTokenSilently} = useAuth0();
-
-    return useQuery({
-        queryKey: ["numFutureVacations", currentPage],
-        queryFn: async () => {
-            const token = await getAccessTokenSilently();
-
-            const response = await api.userSchedulePreferencesRequestGetNumberOfFutureVacationsPost({
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            return response.data;
         },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['userFutureVacations'] })
+        }
     });
 }
 

@@ -1,7 +1,8 @@
 import {useState} from 'react';
 import Pagination from "../Pagination.tsx";
 import UserVacationsPane from "./UserVacationsPane.tsx";
-import {useCurrentUserFutureVacationsCount} from "../../apis.ts";
+import {useQueryCurrentUserFutureVacations} from "../../apis.ts";
+import {UserVacationModel} from "@noadudai/scheduler-backend-client/api.ts";
 
 
 const UserVacationsPage = () => {
@@ -9,19 +10,22 @@ const UserVacationsPage = () => {
     const [itemsPerPage] = useState(8);
     const [currentPage, setCurrentPage] = useState(1);
 
+    const vacations = useQueryCurrentUserFutureVacations();
+    const indexVacationPage = (currentPage - 1) * itemsPerPage;
+
+    const paneVacations: UserVacationModel[] = vacations.data?.vacations?.slice(indexVacationPage, indexVacationPage + itemsPerPage) || [];
+
     const changePage = (pageNumber: number) => {
         setCurrentPage(pageNumber)
     };
 
-    const {data: numVacations} = useCurrentUserFutureVacationsCount(currentPage);
-
     return (
         <div>
             <div>
-                <UserVacationsPane pageNumber={currentPage} itemsPerPage={itemsPerPage} />
+                <UserVacationsPane paneVacations={paneVacations} />
                 <Pagination
                     itemsPerPage={itemsPerPage}
-                    totalItems={numVacations || 1}
+                    totalItems={vacations?.data?.vacations?.length || 1}
                     currentPage={currentPage}
                     onPageChange={changePage}/>
             </div>
