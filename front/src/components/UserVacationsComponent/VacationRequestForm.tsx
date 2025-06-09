@@ -10,16 +10,13 @@ const VacationRequestForm = ({onClose}: { onClose: () => void }) => {
     const [vacationStartDate, setVacationStartDate] = useState<Date | null>(null);
     const [vacationEndDate, setVacationEndDate] = useState<Date | null>(null);
 
-    const mutation = useUserDateRangePreferenceRequest();
+    const mutation = useUserDateRangePreferenceRequest({reSettingStartDate:() => setVacationStartDate(null), reSettingEndDate: () => setVacationEndDate(null)});
 
     const handleSubmitVacation = () => {
 
         const data: UserDateRangePreferenceRequestModel = {start_date: vacationStartDate?.toISOString(), end_date: vacationEndDate?.toISOString(), request_type: DateRangeRequestType.Vacation};
 
         mutation.mutate(data);
-        setVacationStartDate(null);
-        setVacationEndDate(null);
-
 
         onClose();
     }

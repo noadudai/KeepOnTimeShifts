@@ -13,11 +13,13 @@ const UserVacationsPage = () => {
     const vacations = useQueryCurrentUserFutureVacations();
     const indexVacationPage = (currentPage - 1) * itemsPerPage;
 
-    const paneVacations: UserVacationModel[] | undefined = vacations.data?.vacations?.slice(indexVacationPage, indexVacationPage + itemsPerPage);
+    const sortedVacations = vacations.data?.vacations?.sort((a, b) => {
+        const dateA = new Date(a.startDate ?? 0).getTime();
+        const dateB = new Date(b.startDate ?? 0).getTime();
+        return dateA - dateB;
+    })
 
-    const changePage = (pageNumber: number) => {
-        setCurrentPage(pageNumber)
-    };
+    const paneVacations: UserVacationModel[] | undefined = sortedVacations?.slice(indexVacationPage, indexVacationPage + itemsPerPage);
 
     return (
         <div>
@@ -25,9 +27,9 @@ const UserVacationsPage = () => {
                 <UserVacationsPane paneVacations={paneVacations} />
                 <Pagination
                     itemsPerPage={itemsPerPage}
-                    totalItems={vacations?.data?.vacations?.length || 1}
+                    totalItems={vacations?.data?.vacations?.length || 0}
                     currentPage={currentPage}
-                    onPageChange={changePage}/>
+                    onPageChange={(pageNumber: number) => setCurrentPage(pageNumber)}/>
             </div>
         </div>
     )

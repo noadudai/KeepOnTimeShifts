@@ -34,7 +34,7 @@ export const useQueryCurrentUserFutureVacations = () => {
 }
 
 
-export const useUserDateRangePreferenceRequest = () => {
+export const useUserDateRangePreferenceRequest = ({reSettingStartDate, reSettingEndDate}: {reSettingStartDate: () => void, reSettingEndDate: () => void}) => {
     const {getAccessTokenSilently} = useAuth0();
     const queryClient = useQueryClient()
 
@@ -52,6 +52,8 @@ export const useUserDateRangePreferenceRequest = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['userFutureVacations'] })
+            reSettingStartDate();
+            reSettingEndDate();
         }
     });
 }
