@@ -1,4 +1,4 @@
-import {useAuth0} from "@auth0/auth0-react";
+import {LogoutOptions, useAuth0} from "@auth0/auth0-react";
 import { FaRegUserCircle } from "react-icons/fa";
 import HamburgerIcon from "./HamburgerIcon.tsx";
 
@@ -13,7 +13,9 @@ export const HomePageNavbar = () => {
                 <div className="flex items-center pl-8 p-2 shadow-sms">
                     <h1 className="text-4xl text-custom-cream font-opensans">Keep On Time Shifts</h1>
                 </div>
-                <button onClick={() => logout({returnTo: "http://localhost:5173/info/"})} className=" text-custom-cream font-medium  rounded-lg"><FaRegUserCircle size={25}/></button>
+                <button onClick={() => logout({returnTo: `${import.meta.env.VITE_INFOPAGEURL}`} as LogoutOptions)} className=" text-custom-cream font-medium  rounded-lg">
+                    <FaRegUserCircle size={25}/>
+                </button>
                 </div>
             </nav>
         </div>
