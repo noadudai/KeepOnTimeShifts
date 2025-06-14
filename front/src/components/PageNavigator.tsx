@@ -1,4 +1,4 @@
-const Pagination = ({ itemsPerPage, totalItems, currentPage, onPageChange }: {itemsPerPage: number, totalItems: number, currentPage: number, onPageChange: (number: number) => void}) => {
+const PageNavigator = ({ itemsPerPage, totalItems, currentPage, onPageChange }: {itemsPerPage: number, totalItems: number, currentPage: number, onPageChange: (number: number) => void}) => {
 
     const numberOfPages = Math.ceil(totalItems / itemsPerPage);
     const pageNumbers = Array.from({length: numberOfPages}, (_, i) => i + 1);
@@ -25,4 +25,4 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, onPageChange }: {it
     )
 };
 
-export default Pagination;
+export default PageNavigator;
