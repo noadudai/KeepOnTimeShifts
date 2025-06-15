@@ -13,34 +13,27 @@ const UserVacationsPage = () => {
     const {isLoading, data} = useQueryCurrentUserFutureVacations();
     const indexVacationPage = (currentPage - 1) * itemsPerPage;
 
-    const innerComponent = (innerText: string) => <div className="p-6">{innerText}</div>;
+    const sortedVacations = data?.vacations?.sort((a, b) => {
+        const dateA = new Date(a.startDate ?? 0).getTime();
+        const dateB = new Date(b.startDate ?? 0).getTime();
+        return dateA - dateB;
+    });
 
-    if (isLoading) {
-        return innerComponent("Loading Vacations...");
-    } else {
-        if (data && data.vacations && data.vacations.length !== 0) {
-            const sortedVacations = data.vacations.sort((a, b) => {
-                const dateA = new Date(a.startDate ?? 0).getTime();
-                const dateB = new Date(b.startDate ?? 0).getTime();
-                return dateA - dateB;
-            });
+    const paneVacations: UserVacationModel[] | undefined = sortedVacations?.slice(indexVacationPage, indexVacationPage + itemsPerPage);
 
-            const paneVacations: UserVacationModel[] | undefined = sortedVacations?.slice(indexVacationPage, indexVacationPage + itemsPerPage);
+    const innerComponent = isLoading ? <div>Loading...</div> :
+        (data && data.vacations && data.vacations.length !== 0) ?
+            <div>
+                <UserVacationsPane paneVacations={paneVacations}/>
+                <PageNavigator
+                    itemsPerPage={itemsPerPage}
+                    totalItems={data.vacations.length}
+                    currentPage={currentPage}
+                    onPageChange={(pageNumber: number) => setCurrentPage(pageNumber)}/>
+            </div> :
+            <div>No Future Vacations</div>;
 
-            return (
-                <div>
-                    <UserVacationsPane paneVacations={paneVacations} />
-                    <PageNavigator
-                        itemsPerPage={itemsPerPage}
-                        totalItems={data.vacations.length}
-                        currentPage={currentPage}
-                        onPageChange={(pageNumber: number) => setCurrentPage(pageNumber)}/>
-                </div>
-            );
-        } else {
-            return innerComponent("No Future Vacations");
-        }
-    }
+    return <div className="p-6">{innerComponent}</div>
 };
 
 export default UserVacationsPage;

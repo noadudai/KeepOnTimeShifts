@@ -5,7 +5,7 @@ import {UserVacationModel} from "@noadudai/scheduler-backend-client/api.ts";
 const UserVacationsPane = ({paneVacations} : {paneVacations: UserVacationModel[] | undefined}) => {
 
     return (
-        <div className="flex flex-wrap justify-normal items-center gap-6 p-6">
+        <div className="flex flex-wrap justify-normal items-center gap-6">
             {paneVacations ? paneVacations.map((range, index) => (
                 <div
                     key={index}
@@ -23,7 +23,7 @@ const UserVacationsPane = ({paneVacations} : {paneVacations: UserVacationModel[]
                         </button>
                     </div>
                 </div>
-            )) : <p>Loading vacations</p>}
+            )) : <p>Something went wrong.</p>}
         </div>
     );
 };
