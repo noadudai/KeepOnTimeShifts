@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
-    "@noadudai/scheduler-backend-client": "^15518293689.86.1-test",
+    "@noadudai/scheduler-backend-client": "^15663934513.90.1-test",
     "@tanstack/react-query-devtools": "^4.39.1",
     "react-calendar": "^5.1.0",
     "react-date-range": "^2.0.1",

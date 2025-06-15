@@ -14,7 +14,7 @@ const ax = axios.create({
 const api = new UserScheduleRequestApi(undefined, undefined, ax);
 
 
-export const useQueryCurrentUserFutureVacations = () => {
+export const useQueryCurrentUserFutureVacations = (dateRange: UserDateRangePreferenceRequestModel) => {
     const {getAccessTokenSilently} = useAuth0();
 
     return useQuery({
@@ -22,7 +22,7 @@ export const useQueryCurrentUserFutureVacations = () => {
         queryFn: async () => {
             const token = await getAccessTokenSilently();
 
-            const response = await api.userSchedulePreferencesRequestGetFutureVacationsPost({
+            const response = await api.userSchedulePreferencesRequestVacationsByDateRangePost(dateRange, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
