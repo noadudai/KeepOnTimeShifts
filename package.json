@@ -1,10 +1,12 @@
 {
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
-    "@noadudai/scheduler-backend-client": "^13284194991.42.1",
+    "@noadudai/scheduler-backend-client": "^15666512901.92.1",
+    "@tanstack/react-query-devtools": "^4.39.1",
     "react-calendar": "^5.1.0",
     "react-date-range": "^2.0.1",
     "react-datepicker": "^7.6.0",
+    "react-icons": "^5.5.0",
     "react-router-dom": "^7.0.2"
   },
   "devDependencies": {

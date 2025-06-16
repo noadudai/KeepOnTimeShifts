@@ -19,14 +19,18 @@ const AppRoutes = () =>{
 };
 
 createRoot(document.getElementById('root')!).render(
+    <QueryClientProvider client={queryClient}>
+
     <BrowserRouter>
-        <Auth0Provider domain={`${import.meta.env.VITE_AUTH0DOMAIN}`} clientId={`${import.meta.env.VITE_AUTH0CLIENTID}`} authorizationParams={{ redirect_uri: `${import.meta.env.VITE_INFOPAGEURL}`,
-         audience: `${import.meta.env.VITE_AUT0AUDIENCE}`,}}>
-            <QueryClientProvider client={queryClient}>
-                <AppRoutes />
-            </QueryClientProvider>
+        <Auth0Provider domain={`${import.meta.env.VITE_AUTH0DOMAIN}`} clientId={`${import.meta.env.VITE_AUTH0CLIENTID}`} authorizationParams={{ redirect_uri: `${import.meta.env.VITE_HOMEPAGEURL}`,
+         audience: `${import.meta.env.VITE_AUTH0AUDIENCE}`,}}>
+                <div className="min-h-screen bg-custom-cream">
+                    <AppRoutes/>
+                </div>
         </Auth0Provider>
     </BrowserRouter>
+    </QueryClientProvider>
+
 
 )
 
