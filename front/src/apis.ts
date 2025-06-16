@@ -18,7 +18,7 @@ export const useQueryCurrentUserFutureVacations = (dateRange: UserDateRangePrefe
     const {getAccessTokenSilently} = useAuth0();
 
     return useQuery({
-        queryKey: ["userFutureVacations"],
+        queryKey: ["userFutureVacations", dateRange],
         queryFn: async () => {
             const token = await getAccessTokenSilently();
 

@@ -2,8 +2,8 @@ import {useState} from 'react';
 import PageNavigator from "../PageNavigator.tsx";
 import UserVacationsPane from "./UserVacationsPane.tsx";
 import {useQueryCurrentUserFutureVacations} from "../../apis.ts";
-import {UserDateRangePreferenceRequestModel, UserVacationModel} from "@noadudai/scheduler-backend-client/api.ts";
-import {DateRangeRequestType} from "@noadudai/scheduler-backend-client";
+import {UserVacationModel} from "@noadudai/scheduler-backend-client/api.ts";
+import {UserVacationsByDateRangeModel} from "@noadudai/scheduler-backend-client";
 
 
 const UserVacationsPage = () => {
@@ -12,10 +12,14 @@ const UserVacationsPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
     const today = new Date();
-    const nextYear = today.getFullYear() + 1;
-    const endDate = new Date(nextYear, today.getMonth(), today.getDate());
+    today.setSeconds(0, 0);
 
-    const DateRangeForFetchingFutureVacations: UserDateRangePreferenceRequestModel= {start_date: today.toISOString(), end_date: endDate.toISOString(), request_type: DateRangeRequestType.Vacation}
+    const nextYear = today.getFullYear() + 1;
+
+    const endDate = new Date(nextYear, today.getMonth(), today.getDate());
+    endDate.setSeconds(0, 0);
+
+    const DateRangeForFetchingFutureVacations: UserVacationsByDateRangeModel= {start_date: today.toISOString(), end_date: endDate.toISOString()}
 
     const {isLoading, data} = useQueryCurrentUserFutureVacations(DateRangeForFetchingFutureVacations);
     const indexVacationPage = (currentPage - 1) * itemsPerPage;

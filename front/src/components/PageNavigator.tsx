@@ -5,7 +5,7 @@ const PageNavigator = ({ itemsPerPage, totalItems, currentPage, onPageChange }: 
 
     return (
         <div>
-            <ul className='flex justify-center'>
+            <ul className='flex justify-center pt-4'>
                 {pageNumbers.map((number) => (
                     <li key={number}>
                         <a
