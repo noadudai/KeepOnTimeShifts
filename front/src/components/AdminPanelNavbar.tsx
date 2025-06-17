@@ -1,6 +1,4 @@
-import React from 'react';
 import {LogoutOptions, useAuth0} from "@auth0/auth0-react";
-import HamburgerIcon from "./HamburgerIcon.tsx";
 import {FaRegUserCircle} from "react-icons/fa";
 import {GiHamburgerMenu} from "react-icons/gi";
 import {Link} from "react-router-dom";

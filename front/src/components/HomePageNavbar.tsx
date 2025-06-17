@@ -1,10 +1,7 @@
 import {LogoutOptions, useAuth0} from "@auth0/auth0-react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
-
-import HamburgerIcon from "./HamburgerIcon.tsx";
 import {Link} from "react-router-dom";
-import React from "react";
 
 export const HomePageNavbar = () => {
     const { logout } = useAuth0();
