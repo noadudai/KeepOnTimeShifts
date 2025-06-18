@@ -17,7 +17,7 @@ export const HomePageNavbar = () => {
                         <h1 className="text-4xl text-custom-cream font-opensans">Keep On Time Shifts</h1>
                     </div>
                     <div className="flex gap-4">
-                        <Link className="text-custom-cream" to="admin-panel">Overview</Link>
+                        <Link className="text-custom-cream" to="admin-panel/overview">Overview</Link>
                         <button onClick={() => logout({returnTo: `${import.meta.env.VITE_INFOPAGEURL}`} as LogoutOptions)}
                                 className=" text-custom-cream font-medium  rounded-lg">
                             <FaRegUserCircle size={25}/>

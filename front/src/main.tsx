@@ -14,7 +14,7 @@ const AppRoutes = () =>{
         <Routes>
             <Route path="info" element={<InfoPage />} />
             <Route path="/" element={<HomePage />} />
-            <Route path="admin-panel" element={<AdminPage />} />
+            <Route path="admin-panel/*" element={<AdminPage />} />
         </Routes>
 
     );
