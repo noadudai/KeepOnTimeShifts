@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {useNavigate} from "react-router-dom"
+import {adminPages} from "../pages/AdminPages/AdminPagesRecord.ts";
 
 const AdminPageSideBar = () => {
 
@@ -12,7 +13,7 @@ const AdminPageSideBar = () => {
         navigate(path);
     };
 
-    const adminActionPage = (buttonName: string) =>
+    const Page = (buttonName: string) =>
         <button
             className={`${buttonClicked === buttonName.toLowerCase() ? 'bg-custom-pastel-green/80' : 'bg-custom-pastel-green/50'} border border-custom-pastel-green p-2 text-center`}
             onClick={() => handleOnClick(buttonName)}
@@ -20,14 +21,10 @@ const AdminPageSideBar = () => {
             {buttonName}
         </button>;
 
-
     return (
         <div>
             <div className="flex flex-col">
-                {adminActionPage("Overview")}
-                {adminActionPage("Scheduling")}
-                {adminActionPage("Vacations")}
-                {adminActionPage("Employees")}
+                {Object.keys(adminPages).map((key: string) => Page(key))}
             </div>
         </div>
     );

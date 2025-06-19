@@ -1,34 +1,15 @@
 import AdminPanelNavbar from "../components/AdminPanelNavbar.tsx";
 import AdminPageSideBar from "../components/AdminPageSideBar.tsx";
 import {useParams} from "react-router-dom";
-import Overview from "./AdminPages/Overview.tsx";
-import Scheduling from "./AdminPages/Scheduling.tsx";
-import Vacations from "./AdminPages/Vacations.tsx";
-import Employees from "./AdminPages/Employees.tsx";
+import {adminPages} from "./AdminPages/AdminPagesRecord.ts";
 
 
 const AdminPage = () => {
     const {'*': key} = useParams();
 
-    let innerComponent;
+    const validKey = key && key in adminPages ? key : 'overview';
 
-    switch (key) {
-        case 'overview':
-            innerComponent = <Overview />;
-            break;
-        case 'employees':
-            innerComponent = <Employees />;
-            break;
-        case 'scheduling':
-            innerComponent = <Scheduling />;
-            break;
-        case 'vacations':
-            innerComponent = <Vacations />;
-            break;
-        default:
-            innerComponent = <Overview />;
-            break;
-    }
+    const InnerComponent = adminPages[validKey];
 
     return (
         <div>
@@ -39,7 +20,7 @@ const AdminPage = () => {
                         <AdminPageSideBar/>
                     </div>
                     <div className="col-span-4 bg-custom-pastel-green/">
-                        {innerComponent}
+                        <InnerComponent/>
                     </div>
                 </div>
             </div>

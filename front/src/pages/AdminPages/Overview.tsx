@@ -1,9 +1,7 @@
-import EmployeePendingRequestsPanel from "../../components/EmployeePendingRequestsPanel.tsx";
-
 const Overview = () => {
     return (
         <div>
-            <EmployeePendingRequestsPanel/>
+            <h1 className="text-center">Overview</h1>
         </div>
     );
 };
