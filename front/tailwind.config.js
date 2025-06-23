@@ -9,6 +9,7 @@ export default {
       colors: {
         'custom-pastel-green' : '#A0C878',
         'custom-cream' : '#FFFDF6',
+        'custom-cream-warm' : '#FAF6E9',
         'custom-soft-blue' : '#7794B8',
         'custom-warm-coral-pink' : '#E57B73',
       },

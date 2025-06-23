@@ -57,4 +57,3 @@ export const useUserDateRangePreferenceRequest = ({onSuccessCallback}:
         }
     });
 }
-
