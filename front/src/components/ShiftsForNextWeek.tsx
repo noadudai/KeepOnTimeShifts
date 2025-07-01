@@ -1,13 +1,16 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import { TiPlus } from "react-icons/ti";
 import {IoIosCheckmark} from "react-icons/io";
 import {Guid} from "guid-typescript";
 import { format } from 'date-fns';
-import DatePicker from "react-datepicker";
+import DateTimePicker from 'react-datetime-picker';
 import TimePicker from 'react-time-picker'
+import {useCreateNewShiftsSchedule} from "../apis.ts";
+import {ScheduleModel} from "@noadudai/scheduler-backend-client";
 
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-time-picker/dist/TimePicker.css';
+import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
 
 type ShiftTypes = 'Morning' | 'Evening' | 'Closing';
@@ -19,6 +22,11 @@ type ShiftMetadata = {
     shiftType: ShiftTypes;
 };
 
+type EditingShift = {
+    startTime?: Date;
+    endTime?: Date;
+};
+
 const ShiftsForNextWeek = () => {
 
     const daysInWeek: number = 7;
@@ -27,12 +35,10 @@ const ShiftsForNextWeek = () => {
     const shiftTypes: ShiftTypes[] = ['Morning', 'Evening', 'Closing'];
 
     const [currentlyEditing, setCurrentlyEditing] = useState<Guid | undefined>(undefined);
-    const [editingStartTime, setEditingStartTime] = useState<Date | undefined>(undefined);
-    const [editingEndDate, setEditingEndDate] = useState<Date | undefined>(undefined);
-    const [editingEndTime, setEditingEndTime] = useState<Date | undefined>(undefined);
-
+    const [editingShift, setEditingShift] = useState<EditingShift | undefined>(undefined);
 
     const nextWeeksDayDates: Date[] = Array.from({length: daysInWeek}, (_, i) => new Date(today.getFullYear(), today.getMonth(), today.getDate() + nextSunday + i));
+
     const initialState: ShiftMetadata[][] = Array.from(shiftTypes, (type) => nextWeeksDayDates.map((date) => {
         return ({id: Guid.create(), shiftType:type, startTime: date, endTime: undefined});
     }));
@@ -40,37 +46,62 @@ const ShiftsForNextWeek = () => {
     const [shiftsSchedule, setShiftsSchedule] = useState<ShiftMetadata[]>(initialState.flat());
 
     const days = nextWeeksDayDates.map(date =>
-        <p className="bg-custom-pastel-green rounded-lg items-center text-center italic pb-1">
-            {date.toLocaleDateString('en-us', {
-                weekday: 'short',
-                day: "numeric", month: "numeric"
-            })}
+        <p key={date.toISOString()} className="bg-custom-pastel-green rounded-lg items-center text-center italic pb-1">
+            {date.toLocaleDateString('en-us', { weekday: 'short', day: "numeric", month: "numeric" })}
         </p>);
 
-    const shiftTypeInTable = ({shiftType}: {shiftType: string}) => <p className="bg-custom-pastel-green rounded-lg text-xl italic flex items-center justify-center text-center pb-1">{shiftType}</p>
+    const shiftTypeDisplay = ({shiftType}: {shiftType: ShiftTypes}) =>
+        (<p className="bg-custom-pastel-green rounded-lg text-xl italic flex items-center justify-center text-center pb-1">
+            {shiftType}
+        </p>);
+
+    const displayShiftTime = ({startOrEnd, timeToRepresent}: {startOrEnd: string, timeToRepresent: string}) => {
+        return (
+            <>
+                <p className="items-center text-black">
+                    {startOrEnd} at
+                </p>
+                <div className="bg-custom-cream w-20 p-1 rounded-lg text-xs text-center">
+                    {timeToRepresent}
+                </div>
+            </>
+        );
+    };
+
+    const isSameDay = (date1: Date, date2: Date) => {
+        return (
+            date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate()
+        );
+    }
 
     const shiftsButtonsGroupElement = () => (
         <>
             {shiftTypes.map((sType) => (
-                <div className="grid grid-cols-8 w-full h-full gap-4">
-                    {shiftTypeInTable({shiftType:sType})}
+                <div key={sType} className="grid grid-cols-8 w-full h-full gap-4">
+                    {shiftTypeDisplay({shiftType: sType})}
                     {nextWeeksDayDates.map((date) => {
                         const shift = shiftsSchedule.find(s => s.shiftType === sType && s.startTime.toDateString() === date.toDateString());
                         return(
-                            <div>
+                            <div  key={`${sType}-${date.toISOString()}`}>
                                 <div
-                                    className="bg-custom-cream border border-gray-100 rounded-lg w-full h-20  flex justify-center items-center"
+                                    className={`border border-gray-100 rounded-lg w-full h-20 flex justify-center items-center ${
+                                        shift?.endTime !== undefined ? 'bg-custom-cream-warm' : 'bg-custom-cream'
+                                    }`}
                                 >
                                     {shift?.endTime !== undefined ?
                                         (
-                                            <div>
-                                                <div
-                                                    className="flex items-center justify-center text-black text-xs">
-                                                    Starts at {format(shift?.startTime, "HH:mm")}
+                                            <div className="flex flex-col gap-2">
+                                                <div className="flex items-center justify-between">
+                                                    {isSameDay(date, shift?.startTime) ?
+                                                        displayShiftTime({startOrEnd: "Starts", timeToRepresent: format(shift?.startTime, "HH:mm")}) :
+                                                        displayShiftTime({startOrEnd: "Starts", timeToRepresent: format(shift?.startTime, "EEE HH:mm")})}
                                                 </div>
-                                                <div
-                                                    className="flex items-center justify-center text-black text-xs">
-                                                    Ends at {shift?.endTime?.toDateString()}
+                                                <div className="flex items-center gap-6">
+                                                    {isSameDay(date, shift?.endTime) ?
+                                                        displayShiftTime({startOrEnd: "Ends", timeToRepresent: format(shift?.endTime, "HH:mm")}):
+                                                        displayShiftTime({startOrEnd: "Ends", timeToRepresent: format(shift?.endTime, "EEE HH:mm")})}
                                                 </div>
                                             </div>
                                         ) : (
@@ -91,49 +122,100 @@ const ShiftsForNextWeek = () => {
     );
 
     const onSaveEditingShift = () => {
-        console.log("onSaveEditingShifts");
         const shift = shiftsSchedule.find(s => s.id === currentlyEditing);
-        if (editingEndDate && editingStartTime && editingEndTime && shift) {
-            console.log("in if");
+        if (editingShift?.startTime && editingShift?.endTime && shift) {
+
             const newStartTime = new Date(shift.startTime);
-            const newEndTime = new Date(editingEndDate);
-            newStartTime.setHours(editingStartTime.getHours());
-            newStartTime.setMinutes(editingStartTime.getMinutes());
+
+            newStartTime.setHours(editingShift.startTime.getHours());
+            newStartTime.setMinutes(editingShift.startTime.getMinutes());
             newStartTime.setSeconds(0);
             newStartTime.setMilliseconds(0);
 
-            newEndTime.setHours(editingEndTime.getHours());
-            newEndTime.setMinutes(editingEndTime.getMinutes());
-            newEndTime.setSeconds(0);
-            newEndTime.setMilliseconds(0);
-
-            console.log("newStartTime", newStartTime);
-            console.log("newEndTime", newEndTime);
-
-
-            setShiftsSchedule(prev => prev.map((shift) => shift.id === currentlyEditing ? {
-                ...shift, startTime: newStartTime, endTime: editingEndDate,
-            } : shift)
-            );
+            setShiftsSchedule(prev =>
+                prev.map((shift) =>
+                    shift.id === currentlyEditing ? { ...shift, startTime: newStartTime, endTime: editingShift.endTime } : shift));
         }
 
-        setEditingEndDate(undefined);
-        setEditingStartTime(undefined);
+        setEditingShift(undefined);
         setCurrentlyEditing(undefined);
     };
 
-    const timeOnlClick = ({time, onCallback}: {time: string | null , onCallback: (date: Date) => void}) => {
+    const mutation = useCreateNewShiftsSchedule();
+
+    const onSubmitSchedule = () => {
+        const shiftsForMutation = shiftsSchedule.filter(shift => shift.endTime !== undefined);
+        console.log(shiftsForMutation);
+
+        const data: ScheduleModel = {shifts: shiftsForMutation.map((shift) =>
+                ({
+                    shiftStartTime: shift.startTime.toISOString(),
+                    shiftEndTime: shift.endTime?.toISOString(),
+                    shiftType: shiftTypes.indexOf(shift.shiftType)
+                }))};
+
+        mutation.mutate(data);
+    };
+
+
+    const handleTimeSelect = ({time, onCallback, baseDate}: {time: string | null , onCallback: (date: Date) => void, baseDate?: Date}) => {
         if(time){
             const [hour, minute] = time.split(":");
-            console.log(time);
-            console.log("hour", hour, "minute", minute);
-            const startDate = new Date();
-            startDate.setHours(parseInt(hour, 10));
-            startDate.setMinutes(parseInt(minute, 10));
-            console.log(startDate);
-            onCallback(startDate);
+
+            const newDate = baseDate ? new Date(baseDate) : new Date();
+            newDate.setHours(parseInt(hour, 10));
+            newDate.setMinutes(parseInt(minute, 10));
+
+            onCallback(newDate);
         }
     };
+
+    const isEditingShift =
+        <>
+            {currentlyEditing && (
+                <div className="flex pt-64 justify-evenly inset-0 fixed items-center bg-black/5 backdrop-blur-sm">
+                    <div className="bg-white border rounded-xl border-gray-200 p-6 flex flex-col gap-3 items-center">
+                        <div className="flex items-center">
+                            <label>Set shift starting time </label>
+                            <TimePicker clearIcon={null} disableClock={true}
+                                        className="border border-custom-cream-warm bg-custom-cream p-2 text-xs w-28"
+                                        onChange={(e) => {
+                                            handleTimeSelect({
+                                                time: e,
+                                                onCallback: (date) => setEditingShift((prev) => ({
+                                                    ...prev,
+                                                    startTime: date
+                                                })),
+                                                baseDate: editingShift?.startTime ?? new Date(),
+                                            })
+                                        }}
+                                        value={editingShift?.startTime ? format(editingShift?.startTime, "HH:mm") : ""}/>
+                        </div>
+                        <div>
+                            <label>Set shift ending shift </label>
+                            <DateTimePicker
+                                onChange={(date: Date | null) => {
+                                    if (date) {
+                                        setEditingShift((prev) => ({...prev, endTime: date}));
+                                    }
+                                }}
+                                value={editingShift?.endTime}
+                                className="border border-custom-cream-warm bg-custom-cream p-2 text-xs w-40"
+                                disableClock={true}
+                                calendarIcon={null}
+                                clearIcon={null}
+                            />
+                        </div>
+                        <button
+                            className="bg-custom-pastel-green p-2 text-center text-custom-cream rounded-xl items-center"
+                            onClick={onSaveEditingShift}>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            )}
+        </>;
+
 
     return (
         <div className="flex flex-col items-center p-4 gap-4">
@@ -148,43 +230,11 @@ const ShiftsForNextWeek = () => {
                 {days}
             </div>
             {shiftsButtonsGroupElement()}
-            <button className="bg-custom-pastel-green text-center text-custom-cream rounded-full">
+            <button className="bg-custom-pastel-green text-center text-custom-cream rounded-full" onClick={onSubmitSchedule}>
                 <IoIosCheckmark size={40}/>
             </button>
-            {currentlyEditing && (
-                <div className="flex pt-64 justify-evenly inset-0 fixed items-center bg-black/5 backdrop-blur-sm">
-                    <div className="bg-white border rounded-xl border-gray-200 p-6 flex flex-col gap-3 items-center">
-                        <div className="flext">
-                            <label>Set shift starting time </label>
-                            <TimePicker clearIcon={null} disableClock={true}
-                                className="border border-custom-cream-warm bg-custom-cream p-2 text-xs w-28" onChange={(e) => {
-                                timeOnlClick({time: e, onCallback: setEditingStartTime})
-                            }}
-                                value={editingStartTime ? format(editingStartTime, "HH:mm") : ""}/>
-                        </div>
-                        <div>
-                            <label>Set shift ending date </label>
-                            <DatePicker
-                                className="border border-custom-cream-warm bg-custom-cream p-2 text-xs w-28"
-                                selected={editingEndDate} onChange={(date) => setEditingEndDate(date)}/>
-                        </div>
-                        <div className="flext">
-                            <label>Set shift ending time </label>
-                            <TimePicker clearIcon={null} disableClock={true}
-                                className="border border-custom-cream-warm bg-custom-cream p-2 text-xs w-28" onChange={(e) => {
-                                timeOnlClick({time: e, onCallback: setEditingEndTime})
-                            }}
-                                value={editingEndTime ? format(editingEndTime, "HH:mm") : ""}/>
-                        </div>
-                            <button
-                                className="bg-custom-pastel-green text-center text-custom-cream rounded-xl items-center"
-                                onClick={onSaveEditingShift}>
-                                <p className="p-2">Save</p>
-                            </button>
-                        </div>
-                    </div>
-                    )}
-                </div>
+            {isEditingShift}
+        </div>
     );
 };
 
