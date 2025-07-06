@@ -27,6 +27,7 @@ export type ShiftMetadata = {
 };
 
 export type EditingShift = {
+    id?: Guid;
     startTime?: Date;
     endTime?: Date;
 };
@@ -38,7 +39,6 @@ const ShiftsForNextWeek = () => {
     const nextSunday = daysInWeek - today.getDay();
     const shiftTypes: ShiftTypes[] = ['Morning', 'Evening', 'Closing'];
 
-    const [currentlyEditing, setCurrentlyEditing] = useState<Guid | undefined>(undefined);
     const [editingShift, setEditingShift] = useState<EditingShift | undefined>(undefined);
 
     const nextWeeksDayDates: Date[] = Array.from({length: daysInWeek}, (_, i) => new Date(today.getFullYear(), today.getMonth(), today.getDate() + nextSunday + i));
@@ -94,8 +94,7 @@ const ShiftsForNextWeek = () => {
                                                 <button
                                                     className="text-custom-pastel-green"
                                                     onClick={() => {
-                                                        setCurrentlyEditing(shift.id);
-                                                        setEditingShift({startTime: shift.startTime, endTime: shift.endTime});
+                                                        setEditingShift({id: shift.id, startTime: shift.startTime, endTime: shift.endTime});
                                                     }}>
                                                     <TiPlus size={35}/>
                                                 </button>
@@ -105,7 +104,7 @@ const ShiftsForNextWeek = () => {
                                 </div>
                             );
                         } else {
-                            setCurrentlyEditing(undefined);
+                            setEditingShift(undefined);
                         }
                     })}
                 </div>
@@ -139,8 +138,12 @@ const ShiftsForNextWeek = () => {
 
     const EditingShift =
         <>
-            {currentlyEditing && editingShift && (
-                <div className="flex pt-64 justify-evenly inset-0 fixed items-center bg-black/5 backdrop-blur-sm">
+            {editingShift && ( () => {
+                const { id, startTime, endTime } = editingShift;
+                const shift = shiftsSchedule.find(s => s.id === id);
+
+                return (
+                    <div className="flex pt-64 justify-evenly inset-0 fixed items-center bg-black/5 backdrop-blur-sm">
                     <div className="bg-white border rounded-xl border-gray-200 p-6 flex flex-col gap-3 items-center">
                         <div className="flex items-center">
                             <label>Set shift starting time </label>
@@ -157,7 +160,7 @@ const ShiftsForNextWeek = () => {
                                                 });
                                             }
                                         }}
-                                        value={editingShift.startTime ? format(editingShift.startTime, "HH:mm") : ""}/>
+                                        value={startTime ? format(startTime, "HH:mm") : ""}/>
                         </div>
                         <div>
                             <label>Set shift ending shift </label>
@@ -167,7 +170,7 @@ const ShiftsForNextWeek = () => {
                                         setEditingShift((prev) => ({...prev, endTime: date}));
                                     }
                                 }}
-                                value={editingShift.endTime}
+                                value={endTime}
                                 className="border border-custom-cream-warm bg-custom-cream p-2 text-xs w-40"
                                 disableClock={true}
                                 calendarIcon={null}
@@ -177,23 +180,22 @@ const ShiftsForNextWeek = () => {
                         <button
                             className="disabled:bg-gray-300 disabled:text-gray-950 bg-custom-pastel-green p-2 text-center text-custom-cream rounded-xl items-center"
                             onClick={() => {
-                                const shift = shiftsSchedule.find(s => s.id === currentlyEditing);
 
-                                if(editingShift.startTime !== undefined && editingShift.endTime !== undefined && shift) {
+                                if (startTime !== undefined && endTime !== undefined && shift) {
                                     onSaveEditingShift({
-                                        editingShiftStartTime: editingShift.startTime,
-                                        editingShiftEndTime: editingShift.endTime,
+                                        editingShiftStartTime: startTime,
+                                        editingShiftEndTime: endTime,
                                         shiftInScheduleToUpdate: shift,
                                         callBack: saveEditingShiftCallBack,
                                     });
                                 }
                             }}
-                            disabled={!(editingShift.startTime !== undefined && editingShift.endTime !== undefined)}>
+                            disabled={!(startTime !== undefined && endTime !== undefined)}>
                             Save
                         </button>
                     </div>
-                </div>
-            )}
+                </div>)
+            })()}
         </>;
 
 
