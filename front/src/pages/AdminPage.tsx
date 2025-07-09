@@ -5,11 +5,12 @@ import {adminPages} from "./AdminPages/AdminPagesRecord.ts";
 
 
 const AdminPage = () => {
-    const {'*': key} = useParams();
+    const {'*': pageName} = useParams();
 
-    const validKey = key && key in adminPages ? key : 'overview';
+    const validPageName = pageName ? pageName : 'overview';
 
-    const InnerComponent = adminPages[validKey];
+    const InnerPageComponent = validPageName in adminPages ?
+        adminPages[validPageName] : () => <p>Page Not Found</p>;
 
     return (
         <div>
@@ -17,10 +18,10 @@ const AdminPage = () => {
             <div className="justify-items-center">
                 <div className="w-2/3 m-20 min-h-64 rounded-xl bg-white grid grid-cols-5">
                     <div className="col-span-1">
-                        <AdminPageSideBar/>
+                        <AdminPageSideBar currentPage={validPageName}/>
                     </div>
                     <div className="col-span-4 bg-custom-pastel-green/">
-                        <InnerComponent/>
+                        <InnerPageComponent/>
                     </div>
                 </div>
             </div>
