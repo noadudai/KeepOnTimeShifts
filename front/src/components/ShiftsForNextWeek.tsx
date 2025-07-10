@@ -7,7 +7,7 @@ import DateTimePicker from 'react-datetime-picker';
 import TimePicker from 'react-time-picker'
 import {useCreateNewShiftsSchedule} from "../apis.ts";
 import {ScheduleModel} from "@noadudai/scheduler-backend-client";
-import {onSaveEditingShift} from "./ScheduleAndShiftsCreationComponents/SaveEditingShift.ts"
+import {onSaveEditingShift, ShiftDataToSave} from "./ScheduleAndShiftsCreationComponents/SaveEditingShift.ts"
 import {displayShiftTime, shiftTypeDisplay} from "./ScheduleAndShiftsCreationComponents/ShiftTypesAndTimeDisplayElements.tsx";
 import {isSameDay} from "./ScheduleAndShiftsCreationComponents/SameDateCheck.ts";
 
@@ -182,12 +182,14 @@ const ShiftsForNextWeek = () => {
                             onClick={() => {
 
                                 if (startTime !== undefined && endTime !== undefined && shift) {
-                                    onSaveEditingShift({
+                                    const editingShiftDataToSave: ShiftDataToSave = {
                                         editingShiftStartTime: startTime,
                                         editingShiftEndTime: endTime,
                                         shiftInScheduleToUpdate: shift,
-                                        callBack: saveEditingShiftCallBack,
-                                    });
+                                        callBack: saveEditingShiftCallBack
+                                    };
+
+                                    onSaveEditingShift(editingShiftDataToSave);
                                 }
                             }}
                             disabled={!(startTime !== undefined && endTime !== undefined)}>

@@ -1,17 +1,22 @@
 import {Guid} from "guid-typescript";
 import {ShiftMetadata} from "../ShiftsForNextWeek"
 
+export type ShiftDataToSave = {
+    editingShiftStartTime: Date;
+    editingShiftEndTime: Date;
+    shiftInScheduleToUpdate: ShiftMetadata;
+    callBack: (shiftId: Guid, startTime: Date, endTime: Date) => void;
+}
 
-export const onSaveEditingShift = ({editingShiftStartTime, editingShiftEndTime, shiftInScheduleToUpdate, callBack} :
-                            {editingShiftStartTime: Date, editingShiftEndTime: Date, shiftInScheduleToUpdate: ShiftMetadata, callBack: (shiftId: Guid, startTime: Date, endTime: Date) => void}) => {
+export const onSaveEditingShift = (editingShiftDataToSave: ShiftDataToSave) => {
 
-    const newEditingStartTime = new Date(shiftInScheduleToUpdate.startTime);
+    const newEditingStartTime = new Date(editingShiftDataToSave.shiftInScheduleToUpdate.startTime);
 
-    newEditingStartTime.setHours(editingShiftStartTime.getHours());
-    newEditingStartTime.setMinutes(editingShiftStartTime.getMinutes());
+    newEditingStartTime.setHours(editingShiftDataToSave.editingShiftStartTime.getHours());
+    newEditingStartTime.setMinutes(editingShiftDataToSave.editingShiftStartTime.getMinutes());
     newEditingStartTime.setSeconds(0);
     newEditingStartTime.setMilliseconds(0);
 
-    callBack(shiftInScheduleToUpdate.id, newEditingStartTime, editingShiftEndTime);
+    editingShiftDataToSave.callBack(editingShiftDataToSave.shiftInScheduleToUpdate.id, newEditingStartTime, editingShiftDataToSave.editingShiftEndTime);
 
 };
