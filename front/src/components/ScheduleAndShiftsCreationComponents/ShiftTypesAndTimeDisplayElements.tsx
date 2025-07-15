@@ -1,11 +1,12 @@
 import {ShiftTypes} from "../ShiftsForNextWeek"
 
-export const shiftTypeDisplay = ({shiftType}: {shiftType: ShiftTypes}) =>
-    (<p className="bg-custom-pastel-green rounded-lg text-xl italic flex items-center justify-center text-center pb-1">
+export const ShiftTypeDisplay = ({shiftType}: {shiftType: ShiftTypes}) => (
+    <p className="bg-custom-pastel-green rounded-lg text-xl italic flex items-center justify-center text-center pb-1">
         {shiftType}
-    </p>);
+    </p>
+);
 
-export const displayShiftTime = ({startOrEnd, timeToRepresent}: {startOrEnd: string, timeToRepresent: string}) => {
+export const DisplayShiftTime = ({startOrEnd, timeToRepresent}: {startOrEnd: string, timeToRepresent: string}) => {
     return (
         <>
             <p className="items-center text-black">

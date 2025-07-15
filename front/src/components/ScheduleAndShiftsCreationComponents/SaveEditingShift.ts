@@ -8,7 +8,7 @@ export type ShiftDataToSave = {
     callBack: (shiftId: Guid, startTime: Date, endTime: Date) => void;
 }
 
-export const onSaveEditingShift = (editingShiftDataToSave: ShiftDataToSave) => {
+export const saveEditingShift = (editingShiftDataToSave: ShiftDataToSave) => {
 
     const newEditingStartTime = new Date(editingShiftDataToSave.shiftInScheduleToUpdate.startTime);
 

@@ -1,4 +1,4 @@
-export const handleTimeSelect = ({time, onCallback}: {time: string, onCallback: (date: Date) => void}) => {
+export const timePickerTimeChangeHandler = ({time, onCallback}: {time: string, onCallback: (date: Date) => void}) => {
     const [hour, minute] = time.split(":");
 
     const newDate = new Date();
