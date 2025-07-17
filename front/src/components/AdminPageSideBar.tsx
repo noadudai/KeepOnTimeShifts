@@ -6,13 +6,13 @@ const AdminPageSideBar = ({currentPage}: {currentPage: string}) => {
     const navigate = useNavigate();
 
     const handleOnClick = (buttonName: string) => {
-        const path = `/admin-panel/${buttonName.toLowerCase()}`;
+        const path = `/admin-panel/${buttonName}`;
         navigate(path);
     };
 
     const Page = (buttonName: string) =>
         <button
-            className={`${currentPage === buttonName.toLowerCase() ? 'bg-custom-pastel-green/80' : 'bg-custom-pastel-green/50'} border border-custom-pastel-green p-2 text-center`}
+            className={`${currentPage === buttonName ? 'bg-custom-pastel-green/80' : 'bg-custom-pastel-green/50'} border border-custom-pastel-green p-2 text-center`}
             onClick={() => handleOnClick(buttonName)}
         >
             {buttonName}
