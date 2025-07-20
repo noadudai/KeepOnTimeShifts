@@ -1,6 +1,6 @@
 import {ShiftTypeDisplay} from "./ShiftTypesAndTimeDisplayElements.tsx";
 import {isSameDay} from "./SameDateCheck.ts";
-import {RenderShiftTime} from "./RenderShiftTimes.tsx";
+import {ShiftTimePane} from "./ShiftTimePane.tsx";
 import {TiPlus} from "react-icons/ti";
 import {EditingShift, ShiftMetadata, ShiftTypes} from "../ShiftsForNextWeek.tsx";
 
@@ -33,8 +33,8 @@ export const ShiftsButtonsGroup = ({ shiftTypes, nextWeeksDayDates, shiftsSchedu
                                     {shiftEndTime !== undefined ?
                                         (
                                             <div className="flex flex-col gap-2">
-                                                <RenderShiftTime dateToCheck={date} timeToRender={shiftStartTime} startOrEndTimeLabel={"Starts"}/>
-                                                <RenderShiftTime dateToCheck={date} timeToRender={shiftEndTime} startOrEndTimeLabel={"Ends"}/>
+                                                <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftStartTime} label={"Starts"}/>
+                                                <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftEndTime} label={"Ends"}/>
                                             </div>
                                         ) :
                                         (
