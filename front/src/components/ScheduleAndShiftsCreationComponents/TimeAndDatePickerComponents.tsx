@@ -2,14 +2,10 @@ import TimePicker from "react-time-picker";
 import { format } from 'date-fns';
 import {timePickerTimeChangeHandler} from "./TimePickerTimeChangeHandler.ts";
 import DateTimePicker from "react-datetime-picker";
+import {TimePickerAndLabelProps} from "./Types.ts";
 
-type TimePickerComponentProps = {
-    label: string;
-    startTime?: Date;
-    setTimeCallback: (date: Date) => void;
-};
 
-export const TimePickerComponent = ({label, startTime, setTimeCallback}: TimePickerComponentProps) => {
+export const TimePickerAndLabel = ({label, startTime, setTimeCallback}: TimePickerAndLabelProps) => {
     return (
         <div className="flex items-center">
             <label>{label}</label>
@@ -29,7 +25,7 @@ export const TimePickerComponent = ({label, startTime, setTimeCallback}: TimePic
     );
 };
 
-export const DateTimePickerComponent = ({label, endTime, setEditShift}: {label: string, endTime: Date, setEditShift: (date: Date) => void}) => {
+export const DateTimePickerAndLabel = ({label, endTime, setEditShift}: {label: string, endTime: Date, setEditShift: (date: Date) => void}) => {
     return (
         <div>
             <label>{label}</label>

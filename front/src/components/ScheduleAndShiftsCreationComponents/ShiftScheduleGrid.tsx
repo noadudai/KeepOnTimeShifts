@@ -1,21 +1,16 @@
-import {ShiftTypeDisplay} from "./ShiftTypesAndTimeDisplayElements.tsx";
+import {ShiftTypeLabel} from "./ShiftTypesAndTimeDisplayElements.tsx";
 import {isSameDay} from "./SameDateCheck.ts";
 import {ShiftTimePane} from "./ShiftTimePane.tsx";
 import {TiPlus} from "react-icons/ti";
-import {EditingShift, ShiftMetadata, ShiftTypes} from "../ShiftsForNextWeek.tsx";
+import {ShiftsButtonsGroupProps} from "./Types.ts";
 
-export type ShiftsButtonsGroupProps = {
-    shiftTypes: ShiftTypes[];
-    nextWeeksDayDates: Date[];
-    shiftsSchedule: ShiftMetadata[];
-    setEditingShift: (shift: EditingShift | undefined) => void;
-};
 
-export const ShiftsButtonsGroup = ({ shiftTypes, nextWeeksDayDates, shiftsSchedule, setEditingShift }: ShiftsButtonsGroupProps) => {
+
+export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedule, setEditingShift }: ShiftsButtonsGroupProps) => {
      return <>
         {shiftTypes.map((sType) => (
             <div key={sType} className="grid grid-cols-8 w-full h-full gap-4">
-                <ShiftTypeDisplay shiftType={sType} />
+                <ShiftTypeLabel shiftType={sType} />
                 {nextWeeksDayDates.map((date) => {
                     const shift = shiftsSchedule.find(s => s.shiftType === sType && isSameDay(s.startTime, date));
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import {
-    ScheduleMaintenanceApi,
+    ManagerScheduleActionsApi,
     UserDateRangePreferenceRequestModel,
     UserScheduleRequestApi
 } from "@noadudai/scheduler-backend-client/api.ts";
@@ -14,7 +14,7 @@ const ax = axios.create({
 });
 
 const api = new UserScheduleRequestApi(undefined, undefined, ax);
-const managerActionsApi = new ScheduleMaintenanceApi(undefined, undefined, ax);
+const managerActionsApi = new ManagerScheduleActionsApi(undefined, undefined, ax);
 
 
 export const useCreateNewShiftsSchedule = () => {
@@ -24,7 +24,7 @@ export const useCreateNewShiftsSchedule = () => {
         mutationFn: async (data: ScheduleModel) => {
             const token = await getAccessTokenSilently();
 
-            const response = await managerActionsApi.managerScheduleMaintenanceCreateSchedulePost(data, {
+            const response = await managerActionsApi.managerScheduleActionsCreateSchedulePost(data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
