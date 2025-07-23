@@ -23,14 +23,16 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
                         const shiftEndTime = shift.endTime;
                         const shiftStartTime = shift.startTime;
 
+                        // Indicates whether a shift is fully created (it has a defined end time). Since it starts with endTime = undefined and gets defined when the shift is ready
+                        const isShiftReadyForSchedule = shiftEndTime !== undefined;
                         return(
                             <div  key={`${sType}-${date.toISOString()}`}>
                                 <div
                                     className={`border border-gray-100 rounded-lg w-full h-20 flex justify-center items-center ${
-                                        shiftEndTime !== undefined ? 'bg-custom-cream-warm' : 'bg-custom-cream'
+                                        isShiftReadyForSchedule ? 'bg-custom-cream-warm' : 'bg-custom-cream'
                                     }`}
                                 >
-                                    {shiftEndTime !== undefined ?
+                                    {isShiftReadyForSchedule ?
                                         (
                                             <div className="flex flex-col gap-2">
                                                 <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftStartTime} label={"Starts"}/>

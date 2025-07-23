@@ -1,7 +1,9 @@
 import {Guid} from "guid-typescript";
 
 
-export type ShiftTypes = 'Morning' | 'Evening' | 'Closing';
+export const SHIFTTYPES = {MORNIGN: 'Morning', EVENING: 'Evening',  CLOSING: 'Closing'}  as const;
+export type ShiftTypes = typeof SHIFTTYPES[keyof typeof SHIFTTYPES];
+
 
 export type ShiftMetadata = {
     id: Guid;

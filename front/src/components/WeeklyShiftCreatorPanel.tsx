@@ -6,7 +6,7 @@ import {ScheduleModel} from "@noadudai/scheduler-backend-client";
 import {ShiftScheduleGrid} from "./ScheduleAndShiftsCreationComponents/ShiftScheduleGrid.tsx";
 
 
-import {EditingShift, ShiftMetadata, ShiftTypes} from "./ScheduleAndShiftsCreationComponents/Types.ts";
+import {EditingShift, ShiftMetadata, SHIFTTYPES} from "./ScheduleAndShiftsCreationComponents/Types.ts";
 import {EditingShiftPane} from "./ScheduleAndShiftsCreationComponents/EditingShiftPane.tsx";
 
 
@@ -15,13 +15,12 @@ const WeeklyShiftCreatorPanel = () => {
     const daysInWeek: number = 7;
     const today: Date = new Date();
     const nextSunday = daysInWeek - today.getDay();
-    const shiftTypes: ShiftTypes[] = ['Morning', 'Evening', 'Closing'];
 
     const [editingShift, setEditingShift] = useState<EditingShift | undefined>(undefined);
 
     const nextWeeksDayDates: Date[] = Array.from({length: daysInWeek}, (_, i) => new Date(today.getFullYear(), today.getMonth(), today.getDate() + nextSunday + i));
 
-    const initialState: ShiftMetadata[] = Array.from(shiftTypes, (type) => nextWeeksDayDates.map((date) => {
+    const initialState: ShiftMetadata[] = Array.from(Object.values(SHIFTTYPES), (type) => nextWeeksDayDates.map((date) => {
         return ({id: Guid.create(), shiftType:type, startTime: date, endTime: undefined});
     })).flat();
 
@@ -76,7 +75,7 @@ const WeeklyShiftCreatorPanel = () => {
                 <span className="bg-custom-pastel-green rounded-lg text-2xl text-center italic"/>
                 {days}
             </div>
-            <ShiftScheduleGrid shiftTypes={shiftTypes} nextWeeksDayDates={nextWeeksDayDates} shiftsSchedule={shiftsSchedule} setEditingShift={setEditingShift}/>
+            <ShiftScheduleGrid shiftTypes={Array.from(Object.values(SHIFTTYPES))} nextWeeksDayDates={nextWeeksDayDates} shiftsSchedule={shiftsSchedule} setEditingShift={setEditingShift}/>
             <button className="bg-custom-pastel-green text-center text-custom-cream rounded-full" onClick={onSubmitSchedule}>
                 <IoIosCheckmark size={40}/>
             </button>
