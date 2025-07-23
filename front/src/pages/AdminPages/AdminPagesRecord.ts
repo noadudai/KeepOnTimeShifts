@@ -8,6 +8,10 @@ export type Pages = "Overview" | "Employees" | "Scheduling" | "Vacations";
 
 type AdminPages = Record<Pages,  () => React.JSX.Element>;
 
+export const isValidPage = (pageName: string): pageName is Pages => {
+    return pageName in adminPages
+};
+
 export const adminPages: AdminPages = {
     "Overview" : Overview,
     "Employees" : Employees,

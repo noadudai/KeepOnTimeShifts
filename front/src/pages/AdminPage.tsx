@@ -1,7 +1,7 @@
 import AdminPanelNavbar from "../components/AdminPanelNavbar.tsx";
 import AdminPageSideBar from "../components/AdminPageSideBar.tsx";
 import {useParams} from "react-router-dom";
-import {adminPages, Pages} from "./AdminPages/AdminPagesRecord.ts";
+import {adminPages, isValidPage} from "./AdminPages/AdminPagesRecord.ts";
 
 
 const AdminPage = () => {
@@ -9,8 +9,8 @@ const AdminPage = () => {
 
     const validPageName = pageName ?? 'Overview';
 
-    const InnerPageComponent = validPageName in adminPages ?
-        adminPages[validPageName as Pages] : () => <p>Page Not Found</p>;
+    const InnerPageComponent = isValidPage(validPageName) ?
+        adminPages[validPageName] : () => <p>Page Not Found</p>;
 
     return (
         <div>
