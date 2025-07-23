@@ -22,23 +22,3 @@ export type ShiftDataToSave = {
     shiftInScheduleToUpdate: ShiftMetadata;
     callBack: (shiftId: Guid, startTime: Date, endTime: Date) => void;
 }
-
-
-export type ShiftsButtonsGroupProps = {
-    shiftTypes: ShiftTypes[];
-    nextWeeksDayDates: Date[];
-    shiftsSchedule: ShiftMetadata[];
-    setEditingShift: (shift: EditingShift | undefined) => void;
-};
-
-export type ShiftTimePaneProps = {
-    dayClickedInWeek: Date;
-    timeToRender: Date;
-    label: string;
-};
-
-export type TimePickerAndLabelProps = {
-    label: string;
-    startTime?: Date;
-    setTimeCallback: (date: Date) => void;
-};

@@ -10,7 +10,7 @@ import {EditingShift, ShiftMetadata, ShiftTypes} from "./ScheduleAndShiftsCreati
 import {EditingShiftPane} from "./ScheduleAndShiftsCreationComponents/EditingShiftPane.tsx";
 
 
-const ShiftsForNextWeek = () => {
+const WeeklyShiftCreatorPanel = () => {
 
     const daysInWeek: number = 7;
     const today: Date = new Date();
@@ -91,4 +91,4 @@ const ShiftsForNextWeek = () => {
     );
 };
 
-export default ShiftsForNextWeek;
+export default WeeklyShiftCreatorPanel;

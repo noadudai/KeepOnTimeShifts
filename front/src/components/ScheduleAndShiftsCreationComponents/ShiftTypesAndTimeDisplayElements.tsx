@@ -1,4 +1,4 @@
-import {ShiftTypes} from "../ShiftsForNextWeek"
+import {ShiftTypes} from "../WeeklyShiftCreatorPanel.tsx"
 
 export const ShiftTypeLabel = ({shiftType}: {shiftType: ShiftTypes}) => (
     <p className="bg-custom-pastel-green rounded-lg text-xl italic flex items-center justify-center text-center pb-1">

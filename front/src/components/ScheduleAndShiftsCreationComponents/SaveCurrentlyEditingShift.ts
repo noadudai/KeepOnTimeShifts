@@ -1,7 +1,7 @@
 import {ShiftDataToSave} from "./Types.ts";
 
 
-export const saveEditingShift = (editingShiftDataToSave: ShiftDataToSave) => {
+export const saveCurrentlyEditingShift = (editingShiftDataToSave: ShiftDataToSave) => {
 
     const newEditingStartTime = new Date(editingShiftDataToSave.shiftInScheduleToUpdate.startTime);
 

@@ -1,5 +1,5 @@
 import {DateTimePickerAndLabel, TimePickerAndLabel} from "./TimeAndDatePickerComponents.tsx";
-import {saveEditingShift} from "./SaveEditingShift.ts";
+import {saveCurrentlyEditingShift} from "./SaveCurrentlyEditingShift.ts";
 import {EditingShift, ShiftMetadata} from "./Types.ts";
 import {Guid} from "guid-typescript";
 
@@ -42,7 +42,7 @@ export const EditingShiftPane = ({editingShift, shiftsSchedule, saveEditingShift
                                     callBack: saveEditingShiftCallBack
                                 };
 
-                                saveEditingShift(editingShiftDataToSave);
+                                saveCurrentlyEditingShift(editingShiftDataToSave);
                             }
                         }}>
                         Save

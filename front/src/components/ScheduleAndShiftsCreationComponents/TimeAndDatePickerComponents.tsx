@@ -2,8 +2,13 @@ import TimePicker from "react-time-picker";
 import { format } from 'date-fns';
 import {timePickerTimeChangeHandler} from "./TimePickerTimeChangeHandler.ts";
 import DateTimePicker from "react-datetime-picker";
-import {TimePickerAndLabelProps} from "./Types.ts";
 
+
+export type TimePickerAndLabelProps = {
+    label: string;
+    startTime?: Date;
+    setTimeCallback: (date: Date) => void;
+};
 
 export const TimePickerAndLabel = ({label, startTime, setTimeCallback}: TimePickerAndLabelProps) => {
     return (
@@ -30,7 +35,7 @@ export const DateTimePickerAndLabel = ({label, endTime, setEditShift}: {label: s
         <div>
             <label>{label}</label>
             <DateTimePicker
-                onChange={(date: Date | null) => {
+                onChange={(date) => {
                     if (date) {
                         setEditShift(date);
                     }
