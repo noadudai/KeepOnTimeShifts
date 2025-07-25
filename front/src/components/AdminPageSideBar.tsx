@@ -1,7 +1,7 @@
 import {useNavigate} from "react-router-dom"
-import {adminPages} from "../pages/AdminPages/AdminPagesRecord.ts";
+import {AdminPageKey, AdminPages} from "../pages/AdminPages/AdminPagesRecord.ts";
 
-const AdminPageSideBar = ({currentPage}: {currentPage: string}) => {
+const AdminPageSideBar = ({currentPage}: {currentPage: AdminPageKey}) => {
 
     const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ const AdminPageSideBar = ({currentPage}: {currentPage: string}) => {
     return (
         <div>
             <div className="flex flex-col">
-                {Object.keys(adminPages).map((key: string) => Page(key))}
+                {Object.keys(AdminPages).map((key) => Page(key))}
             </div>
         </div>
     );
