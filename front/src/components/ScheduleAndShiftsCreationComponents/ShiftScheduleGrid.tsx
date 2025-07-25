@@ -23,7 +23,7 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
                         const shiftEndTime = shift.endTime;
                         const shiftStartTime = shift.startTime;
 
-                        // Indicates whether a shift is fully created (it has a defined end time). Since it starts with endTime = undefined and gets defined when the shift is ready
+                        // Indicates whether a shift is fully created (it has a defined end time). Since it starts with endTime = undefined and gets defined when the shift is ready/set
                         const isShiftReadyForSchedule = shiftEndTime !== undefined;
                         return(
                             <div  key={`${sType}-${date.toISOString()}`}>

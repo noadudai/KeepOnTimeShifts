@@ -18,9 +18,4 @@ export type EditingShift = {
     endTime?: Date;
 };
 
-export type ShiftDataToSave = {
-    editingShiftStartTime: Date;
-    editingShiftEndTime: Date;
-    shiftInScheduleToUpdate: ShiftMetadata;
-    callBack: (shiftId: Guid, startTime: Date, endTime: Date) => void;
-}
+

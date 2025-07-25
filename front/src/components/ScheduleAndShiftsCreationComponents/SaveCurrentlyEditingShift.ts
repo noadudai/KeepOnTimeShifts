@@ -1,5 +1,12 @@
-import {ShiftDataToSave} from "./Types.ts";
+import {ShiftMetadata} from "./Types.ts";
+import {Guid} from "guid-typescript";
 
+export type ShiftDataToSave = {
+    editingShiftStartTime: Date;
+    editingShiftEndTime: Date;
+    shiftInScheduleToUpdate: ShiftMetadata;
+    callBack: (shiftId: Guid, startTime: Date, endTime: Date) => void;
+}
 
 export const saveCurrentlyEditingShift = (editingShiftDataToSave: ShiftDataToSave) => {
 
