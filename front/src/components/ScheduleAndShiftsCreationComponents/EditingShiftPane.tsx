@@ -12,6 +12,7 @@ export type EditingShiftPageProps = {
 }
 
 export const EditingShiftPane = ({editingShift, shiftsSchedule, saveEditingShiftCallBack, updateEditingShiftStartTime, updateEditingShiftEndTime}: EditingShiftPageProps ) => {
+    const StartAndEndTime = editingShift.startTime !== undefined && editingShift.endTime !== undefined;
     return (
         <>
             <div className="flex pt-64 justify-evenly inset-0 fixed items-center bg-black/5 backdrop-blur-sm">
@@ -24,20 +25,20 @@ export const EditingShiftPane = ({editingShift, shiftsSchedule, saveEditingShift
                     />
                     <DateTimePickerAndLabel
                         label={"Set shift ending shift "}
-                        endTime={editingShift.endTime!}
+                        endTime={editingShift.endTime ?? new Date()} // show the end time or now
                         setEditShift={(date: Date) => updateEditingShiftEndTime(date)}
                     />
                     <button
                         className="disabled:bg-gray-300 disabled:text-gray-950 bg-custom-pastel-green p-2 text-center text-custom-cream rounded-xl items-center"
-                        disabled={!(editingShift.startTime && editingShift.endTime)}
+                        disabled={!StartAndEndTime}
                         onClick={() => {
                             const {id, startTime, endTime} = editingShift;
                             const shift = shiftsSchedule.find(s => s.id === id);
 
-                            if (startTime !== undefined && endTime !== undefined && shift) {
+                            if (StartAndEndTime && shift) {
                                 const editingShiftDataToSave = {
-                                    editingShiftStartTime: startTime,
-                                    editingShiftEndTime: endTime,
+                                    editingShiftStartTime: startTime!,
+                                    editingShiftEndTime: endTime!,
                                     shiftInScheduleToUpdate: shift,
                                     callBack: saveEditingShiftCallBack
                                 };
