@@ -1,6 +1,6 @@
-import React from 'react';
+import {IconType} from "react-icons/lib/iconBase";
 
-const RequestStatusLabel = ({status, backgroundColor, icon}: {status: string, backgroundColor:string, icon: (props: {size?: number}) => React.JSX.Element}) => {
+const RequestStatusLabel = ({status, backgroundColor, icon}: {status: string, backgroundColor:string, icon: IconType}) => {
     return (
         <div
             className={`flex items-center ${backgroundColor} text-xs text-black gap-2 rounded-xl p-2`}>

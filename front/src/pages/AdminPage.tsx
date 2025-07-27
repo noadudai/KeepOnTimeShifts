@@ -15,11 +15,11 @@ const AdminPage = () => {
         <div>
             <AdminPanelNavbar/>
             <div className="justify-items-center">
-                <div className="w-2/3 m-20 min-h-64 rounded-xl bg-white grid grid-cols-5">
+                <div className="w-2/3 m-20 min-h-64 rounded-xl bg-white grid grid-cols-6">
                     <div className="col-span-1">
                         <AdminPageSideBar currentPage={adminPageName}/>
                     </div>
-                    <div className="col-span-4 bg-custom-pastel-green/">
+                    <div className="col-span-5 bg-custom-pastel-green/">
                         <InnerPageComponent/>
                     </div>
                 </div>

@@ -11,6 +11,7 @@ import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-time-picker/dist/TimePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
+
 const queryClient = new QueryClient();
 
 const AppRoutes = () =>{

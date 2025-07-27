@@ -10,7 +10,7 @@ import {EditingShift, ShiftMetadata, SHIFTTYPES} from "./ScheduleAndShiftsCreati
 import {EditingShiftPane} from "./ScheduleAndShiftsCreationComponents/EditingShiftPane.tsx";
 
 
-const WeeklyShiftCreatorPanel = () => {
+const WeeklyShiftCreatorPanel = ({onClose}: { onClose: () => void }) => {
 
     const daysInWeek: number = 7;
     const today: Date = new Date();
@@ -45,14 +45,17 @@ const WeeklyShiftCreatorPanel = () => {
         // Only the shifts that have a defined endTime, are shifts that the manager created for the schedule.
         const shiftsForMutation = shiftsSchedule.filter((shift)  => shift.endTime !== undefined);
 
-        const data: ScheduleModel = {shifts: shiftsForMutation.map((shift) =>
-                ({
-                    shiftStartTime: shift.startTime.toISOString(),
-                    shiftEndTime: shift.endTime!.toISOString(),
-                    shiftType: shift.shiftType
-                }))};
+        if (shiftsForMutation.length > 0) {
+            const data: ScheduleModel = {shifts: shiftsForMutation.map((shift) =>
+                    ({
+                        shiftStartTime: shift.startTime.toISOString(),
+                        shiftEndTime: shift.endTime!.toISOString(),
+                        shiftType: shift.shiftType
+                    }))};
 
-        mutation.mutate(data);
+            mutation.mutate(data);
+        }
+        onClose();
     };
 
     const updateEditingShiftStartTime = (date: Date) => {
@@ -64,28 +67,30 @@ const WeeklyShiftCreatorPanel = () => {
     };
 
     return (
-        <div className="flex flex-col items-center p-4 gap-4">
-            <h1 className="text-center text-2xl font-opensans bg-custom-cream-warm w-full  h-full rounded-lg">
-                Create Shifts for next week
-                <span className="italic text-xs">
-                    {nextWeeksDayDates[0].toDateString()} - {nextWeeksDayDates.at(-1)?.toDateString()}
-                </span>
-            </h1>
-            <div className="grid grid-cols-8 w-full h-full gap-4">
-                <span className="bg-custom-pastel-green rounded-lg text-2xl text-center italic"/>
-                {days}
+        <div className="flex justify-evenly inset-0 bg-opacity-30 backdrop-blur-sm fixed items-center">
+            <div className="flex flex-col w-2/3 bg-white place-self-center items-center p-4 gap-4 border border-gray-200 rounded-lg">
+                <h1 className="text-center text-2xl font-opensans bg-custom-cream-warm w-full p-2 h-full rounded-lg">
+                    Create Shifts for next week <br/>
+                    <span className="italic text-xs">
+                        {nextWeeksDayDates[0].toDateString()} - {nextWeeksDayDates.at(-1)?.toDateString()}
+                    </span>
+                </h1>
+                <div className="grid grid-cols-8 w-full h-full gap-4">
+                    <span className="bg-custom-pastel-green rounded-lg text-2xl text-center italic"/>
+                    {days}
+                </div>
+                <ShiftScheduleGrid shiftTypes={Array.from(Object.values(SHIFTTYPES))} nextWeeksDayDates={nextWeeksDayDates} shiftsSchedule={shiftsSchedule} setEditingShift={setEditingShift}/>
+                <button className="bg-custom-pastel-green text-center text-custom-cream rounded-full" onClick={onSubmitSchedule}>
+                    <IoIosCheckmark size={40}/>
+                </button>
+                {editingShift &&
+                    <EditingShiftPane editingShift={editingShift}
+                                                   shiftsSchedule={shiftsSchedule}
+                                                   saveEditingShiftCallBack={saveEditingShiftCallBack}
+                                                   updateEditingShiftStartTime={updateEditingShiftStartTime}
+                                                   updateEditingShiftEndTime={updateEditingShiftEndTime}
+                    />}
             </div>
-            <ShiftScheduleGrid shiftTypes={Array.from(Object.values(SHIFTTYPES))} nextWeeksDayDates={nextWeeksDayDates} shiftsSchedule={shiftsSchedule} setEditingShift={setEditingShift}/>
-            <button className="bg-custom-pastel-green text-center text-custom-cream rounded-full" onClick={onSubmitSchedule}>
-                <IoIosCheckmark size={40}/>
-            </button>
-            {editingShift &&
-                <EditingShiftPane editingShift={editingShift}
-                                               shiftsSchedule={shiftsSchedule}
-                                               saveEditingShiftCallBack={saveEditingShiftCallBack}
-                                               updateEditingShiftStartTime={updateEditingShiftStartTime}
-                                               updateEditingShiftEndTime={updateEditingShiftEndTime}
-                />}
         </div>
     );
 };
