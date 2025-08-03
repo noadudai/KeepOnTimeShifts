@@ -1,15 +1,15 @@
 import {Guid} from "guid-typescript";
 
 
-export const ShiftTypes = {MORNIGN: 'Morning', EVENING: 'Evening',  CLOSING: 'Closing'}  as const;
-export type AllShiftTypes = typeof ShiftTypes[keyof typeof ShiftTypes];
+export const AllShiftTypes = {MORNING: 'Morning', EVENING: 'Evening',  CLOSING: 'Closing'}  as const;
+export type ShiftType = typeof AllShiftTypes[keyof typeof AllShiftTypes];
 
 
 export type ShiftMetadata = {
     id: Guid;
     startDateAndTime: Date;
-    endDateAndTime: Date | undefined;
-    shiftType: AllShiftTypes;
+    endDateAndTime?: Date;
+    shiftType: ShiftType;
 };
 
 export type EditingShift = {

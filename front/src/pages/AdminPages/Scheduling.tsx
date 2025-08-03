@@ -1,9 +1,11 @@
 import WeeklyShiftCreatorPanel from "../../components/WeeklyShiftCreatorPanel.tsx";
 import {useState} from "react";
 import {Guid} from "guid-typescript";
-import {ShiftMetadata, ShiftTypes} from "../../components/ScheduleAndShiftsCreationComponents/Types.ts";
+import {ShiftMetadata, AllShiftTypes} from "../../components/ScheduleAndShiftsCreationComponents/Types.ts";
 import {ScheduleModel} from "@noadudai/scheduler-backend-client";
 import {useCreateNewShiftsSchedule} from "../../apis.ts";
+
+type ShiftMetadataWithEndDate = ShiftMetadata & {endDateAndTime: Date};
 
 const Scheduling = () => {
     const daysInWeek: number = 7;
@@ -11,11 +13,16 @@ const Scheduling = () => {
     const nextSunday = daysInWeek - today.getDay();
     const nextWeeksDayDates: Date[] = Array.from({length: daysInWeek}, (_, i) => new Date(today.getFullYear(), today.getMonth(), today.getDate() + nextSunday + i));
 
-    const initialState: ShiftMetadata[] = Array.from(Object.values(ShiftTypes), (type) => nextWeeksDayDates.map((date) => {
+    const initialState: ShiftMetadata[] = Array.from(Object.values(AllShiftTypes), (type) => nextWeeksDayDates.map((date) => {
         return ({id: Guid.create(), shiftType:type, startDateAndTime: date, endDateAndTime: undefined});
     })).flat();
 
     const [shiftsSchedule, setShiftsSchedule] = useState<ShiftMetadata[]>(initialState);
+    // Only the shifts that have a defined endDateAndTime, are shifts that the manager created for the schedule.
+    const hasEndDate = (shift: ShiftMetadata): shift is ShiftMetadataWithEndDate =>
+        shift.endDateAndTime !== undefined;
+    const shiftsForMutation: ShiftMetadataWithEndDate[] = shiftsSchedule.filter(hasEndDate);
+
     const [isCreatingShiftsOpen, setIsCreatingShiftsOpen] = useState(false);
 
     const saveEditingShiftToSchedule = (shiftId: Guid, startDateAndTime: Date, endDateAndTime: Date) => {
@@ -26,22 +33,20 @@ const Scheduling = () => {
 
     const mutation = useCreateNewShiftsSchedule();
 
-    const submitShiftsSchedule = () => {
-        // Only the shifts that have a defined endDateAndTime, are shifts that the manager created for the schedule.
-        const shiftsForMutation = shiftsSchedule.filter((shift): shift is ShiftMetadata  & { endDateAndTime: Date }  => shift.endDateAndTime !== undefined);
+    const submitShiftsSchedule = (shiftsForMutation.length > 0 ? () => {
+        const data: ScheduleModel = {shifts: shiftsForMutation.map((shift) =>
+                ({
+                    shiftStartTime: shift.startDateAndTime.toISOString(),
+                    shiftEndTime: shift.endDateAndTime.toISOString(),
+                    shiftType: shift.shiftType
+                }))};
 
-        if (shiftsForMutation.length > 0) {
-            const data: ScheduleModel = {shifts: shiftsForMutation.map((shift) =>
-                    ({
-                        shiftStartTime: shift.startDateAndTime.toISOString(),
-                        shiftEndTime: shift.endDateAndTime.toISOString(),
-                        shiftType: shift.shiftType
-                    }))};
+        mutation.mutate(data);
 
-            mutation.mutate(data);
-        }
         setIsCreatingShiftsOpen(false);
-    };
+    } : undefined);
+
+    console.log(submitShiftsSchedule === undefined);
 
     return (
         <div className="flex items-center justify-center gap-4 p-2">

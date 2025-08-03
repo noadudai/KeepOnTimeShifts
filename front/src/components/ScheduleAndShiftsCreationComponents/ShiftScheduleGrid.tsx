@@ -2,10 +2,10 @@ import {ShiftTypeLabel} from "./ShiftTypesAndTimeDisplayElements.tsx";
 import {isSameDay} from "./SameDateCheck.ts";
 import {ShiftTimePane} from "./ShiftTimePane.tsx";
 import {TiPlus} from "react-icons/ti";
-import {EditingShift, ShiftMetadata, AllShiftTypes} from "./Types.ts";
+import {EditingShift, ShiftMetadata, ShiftType} from "./Types.ts";
 
 export type ShiftScheduleGridProps = {
-    shiftTypes: AllShiftTypes[];
+    shiftTypes: ShiftType[];
     nextWeeksDayDates: Date[];
     shiftsSchedule: ShiftMetadata[];
     setEditingShift: (shift: EditingShift | undefined) => void;

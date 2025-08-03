@@ -10,6 +10,12 @@ export type TimePickerAndLabelProps = {
     setTimeCallback: (date: Date) => void;
 };
 
+export type DateTimePickerAndLabelProps = {
+    label: string;
+    endTime?: Date;
+    setDatetimeCallback: (date: Date) => void;
+};
+
 export const TimePickerAndLabel = ({label, startTime, setTimeCallback}: TimePickerAndLabelProps) => {
     return (
         <div className="flex items-center">
@@ -30,14 +36,14 @@ export const TimePickerAndLabel = ({label, startTime, setTimeCallback}: TimePick
     );
 };
 
-export const DateTimePickerAndLabel = ({label, endTime, setEditShift}: {label: string, endTime: Date | string, setEditShift: (date: Date) => void}) => {
+export const DateTimePickerAndLabel = ({label, endTime, setDatetimeCallback}: DateTimePickerAndLabelProps) => {
     return (
         <div>
             <label>{label}</label>
             <DateTimePicker
                 onChange={(date) => {
                     if (date) {
-                        setEditShift(date);
+                        setDatetimeCallback(date);
                     }
                 }}
                 value={endTime}

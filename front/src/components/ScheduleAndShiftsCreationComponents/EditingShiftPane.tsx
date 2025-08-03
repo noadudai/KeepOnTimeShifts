@@ -25,8 +25,8 @@ export const EditingShiftPane = ({editingShift, shiftInSchedule, saveEditingShif
                     />
                     <DateTimePickerAndLabel
                         label={"Set shift ending shift "}
-                        endTime={editingShift.endDateAndTime ?? ""} // show the end time or nothing
-                        setEditShift={(date: Date) => updateEditingShiftEndDateAndTime(date)}
+                        endTime={editingShift.endDateAndTime ?? undefined} // show the end time or nothing
+                        setDatetimeCallback={(date: Date) => updateEditingShiftEndDateAndTime(date)}
                     />
                     <button
                         className="disabled:bg-gray-300 disabled:text-gray-950 bg-custom-pastel-green p-2 text-center text-custom-cream rounded-xl items-center"

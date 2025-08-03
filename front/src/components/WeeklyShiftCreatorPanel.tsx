@@ -3,7 +3,7 @@ import {IoIosCheckmark} from "react-icons/io";
 import {Guid} from "guid-typescript";
 import {ShiftScheduleGrid} from "./ScheduleAndShiftsCreationComponents/ShiftScheduleGrid.tsx";
 import { IoClose } from "react-icons/io5";
-import {EditingShift, ShiftMetadata, ShiftTypes} from "./ScheduleAndShiftsCreationComponents/Types.ts";
+import {EditingShift, ShiftMetadata, AllShiftTypes} from "./ScheduleAndShiftsCreationComponents/Types.ts";
 import {EditingShiftPane} from "./ScheduleAndShiftsCreationComponents/EditingShiftPane.tsx";
 
 type WeeklyShiftCreatorPanelProps = {
@@ -11,7 +11,7 @@ type WeeklyShiftCreatorPanelProps = {
     saveEditingShiftToSchedule: (id: Guid, start: Date, end: Date) => void
     shiftsSchedule: ShiftMetadata[];
     nextWeeksDayDates: Date[];
-    onSubmitSchedule: () => void;
+    onSubmitSchedule: (() => void) | undefined;
 };
 
 const WeeklyShiftCreatorPanel = ({ onClose, saveEditingShiftToSchedule, shiftsSchedule, nextWeeksDayDates, onSubmitSchedule }: WeeklyShiftCreatorPanelProps) => {
@@ -52,8 +52,8 @@ const WeeklyShiftCreatorPanel = ({ onClose, saveEditingShiftToSchedule, shiftsSc
                     <span className="bg-custom-pastel-green rounded-lg text-2xl text-center italic"/>
                     {days}
                 </div>
-                <ShiftScheduleGrid shiftTypes={Array.from(Object.values(ShiftTypes))} nextWeeksDayDates={nextWeeksDayDates} shiftsSchedule={shiftsSchedule} setEditingShift={setEditingShift}/>
-                <button className="bg-custom-pastel-green text-center text-custom-cream rounded-full" onClick={onSubmitSchedule}>
+                <ShiftScheduleGrid shiftTypes={Array.from(Object.values(AllShiftTypes))} nextWeeksDayDates={nextWeeksDayDates} shiftsSchedule={shiftsSchedule} setEditingShift={setEditingShift}/>
+                <button className="bg-custom-pastel-green text-center text-custom-cream rounded-full disabled:bg-gray-300 disabled:text-gray-950" disabled={(onSubmitSchedule === undefined)} onClick={onSubmitSchedule}>
                     <IoIosCheckmark size={40}/>
                 </button>
                 {editingShift &&
