@@ -11,7 +11,7 @@ type WeeklyShiftCreatorPanelProps = {
     saveEditingShiftToSchedule: (id: Guid, start: Date, end: Date) => void
     shiftsSchedule: ShiftMetadata[];
     nextWeeksDayDates: Date[];
-    onSubmitSchedule: (() => void) | undefined;
+    onSubmitSchedule?: () => void;
 };
 
 const WeeklyShiftCreatorPanel = ({ onClose, saveEditingShiftToSchedule, shiftsSchedule, nextWeeksDayDates, onSubmitSchedule }: WeeklyShiftCreatorPanelProps) => {
