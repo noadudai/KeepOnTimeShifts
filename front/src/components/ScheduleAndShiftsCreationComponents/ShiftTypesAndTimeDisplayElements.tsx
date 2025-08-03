@@ -1,16 +1,17 @@
-import {ShiftTypes} from "../WeeklyShiftCreatorPanel.tsx"
+import {AllShiftTypes} from "./Types.ts";
 
-export const ShiftTypeLabel = ({shiftType}: {shiftType: ShiftTypes}) => (
+type ShiftTimingLabel = "Starts" | "Ends";
+export const ShiftTypeLabel = ({shiftType}: {shiftType: AllShiftTypes}) => (
     <p className="bg-custom-pastel-green rounded-lg text-xl italic flex items-center justify-center text-center pb-1">
         {shiftType}
     </p>
 );
 
-export const ShiftTimeInfo = ({startOrEnd, timeToRepresent}: {startOrEnd: string, timeToRepresent: string}) => {
+export const ShiftTimeInfo = ({timingLabel, timeToRepresent}: {timingLabel: ShiftTimingLabel, timeToRepresent: string}) => {
     return (
         <>
             <p className="items-center text-black">
-                {startOrEnd} at
+                {timingLabel} at
             </p>
             <div className="bg-custom-cream w-20 p-1 rounded-lg text-xs text-center">
                 {timeToRepresent}

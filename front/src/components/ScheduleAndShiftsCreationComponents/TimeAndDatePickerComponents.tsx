@@ -30,7 +30,7 @@ export const TimePickerAndLabel = ({label, startTime, setTimeCallback}: TimePick
     );
 };
 
-export const DateTimePickerAndLabel = ({label, endTime, setEditShift}: {label: string, endTime: Date, setEditShift: (date: Date) => void}) => {
+export const DateTimePickerAndLabel = ({label, endTime, setEditShift}: {label: string, endTime: Date | string, setEditShift: (date: Date) => void}) => {
     return (
         <div>
             <label>{label}</label>

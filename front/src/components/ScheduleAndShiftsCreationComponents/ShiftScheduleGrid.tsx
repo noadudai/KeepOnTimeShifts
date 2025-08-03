@@ -2,10 +2,10 @@ import {ShiftTypeLabel} from "./ShiftTypesAndTimeDisplayElements.tsx";
 import {isSameDay} from "./SameDateCheck.ts";
 import {ShiftTimePane} from "./ShiftTimePane.tsx";
 import {TiPlus} from "react-icons/ti";
-import {EditingShift, ShiftMetadata, ShiftTypes} from "./Types.ts";
+import {EditingShift, ShiftMetadata, AllShiftTypes} from "./Types.ts";
 
 export type ShiftScheduleGridProps = {
-    shiftTypes: ShiftTypes[];
+    shiftTypes: AllShiftTypes[];
     nextWeeksDayDates: Date[];
     shiftsSchedule: ShiftMetadata[];
     setEditingShift: (shift: EditingShift | undefined) => void;
@@ -17,11 +17,11 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
             <div key={sType} className="grid grid-cols-8 w-full h-full gap-4">
                 <ShiftTypeLabel shiftType={sType} />
                 {nextWeeksDayDates.map((date) => {
-                    const shift = shiftsSchedule.find(s => s.shiftType === sType && isSameDay(s.startTime, date));
+                    const shift = shiftsSchedule.find(s => s.shiftType === sType && isSameDay(s.startDateAndTime, date));
 
                     if (shift) {
-                        const shiftEndTime = shift.endTime;
-                        const shiftStartTime = shift.startTime;
+                        const shiftEndTime = shift.endDateAndTime;
+                        const shiftStartTime = shift.startDateAndTime;
 
                         // "shiftEndTime !== undefined" means the manager created/set the shift for next week
                         const isShiftReadyForSchedule = shiftEndTime !== undefined;
@@ -41,7 +41,7 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
                                         ) :
                                         (
                                             <button className="text-custom-pastel-green"
-                                                    onClick={() => {setEditingShift({id: shift.id, startTime: shiftStartTime, endTime: shiftEndTime})}}>
+                                                    onClick={() => {setEditingShift({id: shift.id, startDateAndTime: shiftStartTime, endDateAndTime: shiftEndTime})}}>
                                                 <TiPlus size={35}/>
                                             </button>
                                         )
@@ -49,6 +49,8 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
                                 </div>
                             </div>
                         );
+                    } else {
+                        return (<p> Shift this doesnt exist</p>); // Later, loading shift animation
                     }
                 })}
             </div>

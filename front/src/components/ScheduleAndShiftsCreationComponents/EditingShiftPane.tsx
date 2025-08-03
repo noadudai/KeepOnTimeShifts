@@ -1,18 +1,18 @@
 import {DateTimePickerAndLabel, TimePickerAndLabel} from "./TimeAndDatePickerComponents.tsx";
-import {saveCurrentlyEditingShift} from "./SaveCurrentlyEditingShift.ts";
 import {EditingShift, ShiftMetadata} from "./Types.ts";
 import {Guid} from "guid-typescript";
 
 export type EditingShiftPageProps = {
     editingShift: EditingShift;
-    shiftsSchedule: ShiftMetadata[];
-    saveEditingShiftCallBack: (id: Guid, start: Date, end: Date) => void;
+    shiftInSchedule: ShiftMetadata;
+    saveEditingShiftDateAndTimesToScheduleCallBack: (id: Guid, start: Date, end: Date) => void;
     updateEditingShiftStartTime: (date: Date) => void;
-    updateEditingShiftEndTime: (date: Date) => void;
+    updateEditingShiftEndDateAndTime: (date: Date) => void;
 }
 
-export const EditingShiftPane = ({editingShift, shiftsSchedule, saveEditingShiftCallBack, updateEditingShiftStartTime, updateEditingShiftEndTime}: EditingShiftPageProps ) => {
-    const StartAndEndTime = editingShift.startTime !== undefined && editingShift.endTime !== undefined;
+export const EditingShiftPane = ({editingShift, shiftInSchedule, saveEditingShiftDateAndTimesToScheduleCallBack, updateEditingShiftStartTime, updateEditingShiftEndDateAndTime}: EditingShiftPageProps ) => {
+    const {id, startDateAndTime, endDateAndTime} = editingShift;
+    const hasStartAndEndTime = startDateAndTime !== undefined && endDateAndTime !== undefined;
     return (
         <>
             <div className="flex pt-64 justify-evenly inset-0 fixed items-center bg-black/5 backdrop-blur-sm">
@@ -20,30 +20,30 @@ export const EditingShiftPane = ({editingShift, shiftsSchedule, saveEditingShift
                     className="bg-white border rounded-xl border-gray-200 p-6 flex flex-col gap-3 items-center">
                     <TimePickerAndLabel
                         label={"Set shift starting time "}
-                        startTime={editingShift.startTime}
+                        startTime={editingShift.startDateAndTime}
                         setTimeCallback={(date: Date) => updateEditingShiftStartTime(date)}
                     />
                     <DateTimePickerAndLabel
                         label={"Set shift ending shift "}
-                        endTime={editingShift.endTime ?? new Date()} // show the end time or now
-                        setEditShift={(date: Date) => updateEditingShiftEndTime(date)}
+                        endTime={editingShift.endDateAndTime ?? ""} // show the end time or nothing
+                        setEditShift={(date: Date) => updateEditingShiftEndDateAndTime(date)}
                     />
                     <button
                         className="disabled:bg-gray-300 disabled:text-gray-950 bg-custom-pastel-green p-2 text-center text-custom-cream rounded-xl items-center"
-                        disabled={!StartAndEndTime}
+                        disabled={!hasStartAndEndTime}
                         onClick={() => {
-                            const {id, startTime, endTime} = editingShift;
-                            const shift = shiftsSchedule.find(s => s.id === id);
+                            if (hasStartAndEndTime) {
+                                // shiftInSchedule.startDateAndTime has only the target date — time is irrelevant.
+                                // editingShift.startDateAndTime has only the target new time — date is irrelevant.
+                                // newEditingStartDateAndTime combine the target date and time
+                                const newEditingStartDateAndTime = new Date(shiftInSchedule.startDateAndTime);
 
-                            if (StartAndEndTime && shift) {
-                                const editingShiftDataToSave = {
-                                    editingShiftStartTime: startTime!,
-                                    editingShiftEndTime: endTime!,
-                                    shiftInScheduleToUpdate: shift,
-                                    callBack: saveEditingShiftCallBack
-                                };
+                                newEditingStartDateAndTime.setHours(startDateAndTime.getHours());
+                                newEditingStartDateAndTime.setMinutes(startDateAndTime.getMinutes());
+                                newEditingStartDateAndTime.setSeconds(0);
+                                newEditingStartDateAndTime.setMilliseconds(0);
 
-                                saveCurrentlyEditingShift(editingShiftDataToSave);
+                                saveEditingShiftDateAndTimesToScheduleCallBack(id, newEditingStartDateAndTime, endDateAndTime);
                             }
                         }}>
                         Save
