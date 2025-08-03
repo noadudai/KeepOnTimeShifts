@@ -50,7 +50,7 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
                             </div>
                         );
                     } else {
-                        return (<p> Shift this doesnt exist</p>); // Later, loading shift animation
+                        return (<p> This shift doesnt exist</p>); // Later, loading shift animation
                     }
                 })}
             </div>

@@ -20,12 +20,12 @@ export const EditingShiftPane = ({editingShift, shiftInSchedule, saveEditingShif
                     className="bg-white border rounded-xl border-gray-200 p-6 flex flex-col gap-3 items-center">
                     <TimePickerAndLabel
                         label={"Set shift starting time "}
-                        startTime={editingShift.startDateAndTime}
+                        startTime={startDateAndTime}
                         setTimeCallback={(date: Date) => updateEditingShiftStartTime(date)}
                     />
                     <DateTimePickerAndLabel
                         label={"Set shift ending shift "}
-                        endTime={editingShift.endDateAndTime ?? undefined} // show the end time or nothing
+                        endTime={endDateAndTime ?? undefined} // show the end time or nothing
                         setDatetimeCallback={(date: Date) => updateEditingShiftEndDateAndTime(date)}
                     />
                     <button

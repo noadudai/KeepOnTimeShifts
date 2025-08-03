@@ -18,10 +18,12 @@ const Scheduling = () => {
     })).flat();
 
     const [shiftsSchedule, setShiftsSchedule] = useState<ShiftMetadata[]>(initialState);
+
     // Only the shifts that have a defined endDateAndTime, are shifts that the manager created for the schedule.
-    const hasEndDate = (shift: ShiftMetadata): shift is ShiftMetadataWithEndDate =>
-        shift.endDateAndTime !== undefined;
-    const shiftsForMutation: ShiftMetadataWithEndDate[] = shiftsSchedule.filter(hasEndDate);
+    const shiftHasEndDate = (shift: ShiftMetadata): shift is ShiftMetadataWithEndDate => {
+        return shift.endDateAndTime !== undefined;
+    };
+    const shiftsForMutation: ShiftMetadataWithEndDate[] = shiftsSchedule.filter(shiftHasEndDate);
 
     const [isCreatingShiftsOpen, setIsCreatingShiftsOpen] = useState(false);
 
@@ -45,8 +47,6 @@ const Scheduling = () => {
 
         setIsCreatingShiftsOpen(false);
     } : undefined);
-
-    console.log(submitShiftsSchedule === undefined);
 
     return (
         <div className="flex items-center justify-center gap-4 p-2">
