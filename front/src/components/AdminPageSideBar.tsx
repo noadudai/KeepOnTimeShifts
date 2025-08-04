@@ -11,7 +11,7 @@ const AdminPageSideBar = ({currentPage}: {currentPage: AdminPageKey}) => {
     };
 
     const Page = (buttonName: string) =>
-        <button
+        <button key={buttonName}
             className={`${currentPage === buttonName ? 'bg-custom-pastel-green/80' : 'bg-custom-pastel-green/50'} border border-custom-pastel-green p-2 text-center`}
             onClick={() => handleOnClick(buttonName)}
         >

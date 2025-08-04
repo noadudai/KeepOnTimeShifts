@@ -11,6 +11,8 @@ const HomePage = () => {
                 <div className="w-2/3 m-20 rounded-xl bg-white">
                     <VacationsPanel />
                 </div>
+                <div className="w-2/3 m-20 rounded-xl bg-white">
+                </div>
             </div>
         </div>
     );

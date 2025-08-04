@@ -1,10 +1,12 @@
 import axios from "axios";
 import {
+    ManagerScheduleActionsApi,
     UserDateRangePreferenceRequestModel,
     UserScheduleRequestApi
 } from "@noadudai/scheduler-backend-client/api.ts";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {useAuth0} from "@auth0/auth0-react";
+import {ScheduleModel} from "@noadudai/scheduler-backend-client";
 
 
 const ax = axios.create({
@@ -12,6 +14,26 @@ const ax = axios.create({
 });
 
 const api = new UserScheduleRequestApi(undefined, undefined, ax);
+const managerActionsApi = new ManagerScheduleActionsApi(undefined, undefined, ax);
+
+
+export const useCreateNewShiftsSchedule = () => {
+    const {getAccessTokenSilently} = useAuth0();
+
+    return useMutation({
+        mutationFn: async (data: ScheduleModel) => {
+            const token = await getAccessTokenSilently();
+
+            const response = await managerActionsApi.managerScheduleActionsCreateSchedulePost(data, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            return response;
+        }
+    });
+}
 
 
 export const useQueryCurrentUserFutureVacations = (dateRange: UserDateRangePreferenceRequestModel) => {
@@ -57,4 +79,3 @@ export const useUserDateRangePreferenceRequest = ({onSuccessCallback}:
         }
     });
 }
-
