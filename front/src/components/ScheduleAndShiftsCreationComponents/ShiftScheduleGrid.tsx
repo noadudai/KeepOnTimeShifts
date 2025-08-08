@@ -3,6 +3,7 @@ import {isSameDay} from "./SameDateCheck.ts";
 import {ShiftTimePane} from "./ShiftTimePane.tsx";
 import {TiPlus} from "react-icons/ti";
 import {EditingShift, ShiftMetadata, ShiftType} from "./Types.ts";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 export type ShiftScheduleGridProps = {
     shiftTypes: ShiftType[];
@@ -34,9 +35,16 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
                                 >
                                     {isShiftReadyForSchedule ?
                                         (
-                                            <div className="flex flex-col gap-2">
-                                                <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftStartTime} label={"Starts"}/>
-                                                <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftEndTime} label={"Ends"}/>
+                                            <div className="flex flex-row gap-2">
+
+                                                <div className="flex flex-col gap-1">
+                                                    <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftStartTime} label={"Starts"}/>
+                                                    <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftEndTime} label={"Ends"}/>
+                                                </div>
+                                                <button className="bg-custom-pastel-green rounded-full"
+                                                onClick={() => {setEditingShift({id: shift.id, startDateAndTime: shiftStartTime, endDateAndTime: shiftEndTime})}}>
+                                                    <MdOutlineModeEdit size={20}/>
+                                                </button>
                                             </div>
                                         ) :
                                         (

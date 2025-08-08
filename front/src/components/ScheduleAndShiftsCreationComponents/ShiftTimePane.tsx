@@ -1,12 +1,12 @@
 import { format } from 'date-fns';
 import {isSameDay} from "./SameDateCheck.ts";
-import {ShiftTimeInfo} from "./ShiftTypesAndTimeDisplayElements.tsx";
+import {ShiftTimeInfo, ShiftTimingLabel} from "./ShiftTypesAndTimeDisplayElements.tsx";
 
 
 export type ShiftTimePaneProps = {
     dayClickedInWeek: Date;
     timeToRender: Date;
-    label: string;
+    label: ShiftTimingLabel;
 };
 
 export const ShiftTimePane = ({dayClickedInWeek, timeToRender, label}: ShiftTimePaneProps) => {

@@ -1,6 +1,6 @@
 import {ShiftType} from "./Types.ts";
 
-type ShiftTimingLabel = "Starts" | "Ends";
+export type ShiftTimingLabel = "Starts" | "Ends";
 export const ShiftTypeLabel = ({shiftType}: {shiftType: ShiftType}) => (
     <p className="bg-custom-pastel-green rounded-lg text-xl italic flex items-center justify-center text-center pb-1">
         {shiftType}

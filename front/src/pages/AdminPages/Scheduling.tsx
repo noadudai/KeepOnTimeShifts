@@ -46,6 +46,7 @@ const Scheduling = () => {
         mutation.mutate(data);
 
         setIsCreatingShiftsOpen(false);
+        setShiftsSchedule(initialState)
     } : undefined);
 
     return (
