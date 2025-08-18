@@ -18,4 +18,4 @@ export type EditingShift = {
     endDateAndTime?: Date;
 };
 
-
+export type ShiftMetadataWithEndDate = ShiftMetadata & {endDateAndTime: Date};
