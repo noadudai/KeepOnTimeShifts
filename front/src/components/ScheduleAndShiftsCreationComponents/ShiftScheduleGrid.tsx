@@ -42,14 +42,14 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
                                                     <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftEndTime} label={"Ends"}/>
                                                 </div>
                                                 <button className="bg-custom-pastel-green rounded-full"
-                                                onClick={() => {setEditingShift({id: shift.id, startDateAndTime: shiftStartTime, endDateAndTime: shiftEndTime})}}>
+                                                onClick={() => {setEditingShift(shift)}}>
                                                     <MdOutlineModeEdit size={20}/>
                                                 </button>
                                             </div>
                                         ) :
                                         (
                                             <button className="text-custom-pastel-green"
-                                                    onClick={() => {setEditingShift({id: shift.id, startDateAndTime: shiftStartTime, endDateAndTime: shiftEndTime})}}>
+                                                    onClick={() => {setEditingShift(shift)}}>
                                                 <TiPlus size={35}/>
                                             </button>
                                         )
