@@ -1,9 +1,9 @@
 import {DateTimePickerAndLabel, TimePickerAndLabel} from "./TimeAndDatePickerComponents.tsx";
-import {EditingShift, ShiftMetadata} from "./Types.ts";
+import {ShiftMetadata} from "./Types.ts";
 import {Guid} from "guid-typescript";
 
 export type EditingShiftPageProps = {
-    editingShift: EditingShift;
+    editingShift: ShiftMetadata;
     shiftInSchedule: ShiftMetadata;
     saveEditingShiftDateAndTimesToScheduleCallBack: (id: Guid, start: Date, end: Date) => void;
     updateEditingShiftStartTime: (date: Date) => void;

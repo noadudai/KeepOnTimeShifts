@@ -3,7 +3,7 @@ import {IoIosCheckmark} from "react-icons/io";
 import {Guid} from "guid-typescript";
 import {ShiftScheduleGrid} from "./ScheduleAndShiftsCreationComponents/ShiftScheduleGrid.tsx";
 import { IoClose } from "react-icons/io5";
-import {EditingShift, ShiftMetadata, AllShiftTypes} from "./ScheduleAndShiftsCreationComponents/Types.ts";
+import {ShiftMetadata, AllShiftTypes} from "./ScheduleAndShiftsCreationComponents/Types.ts";
 import {EditingShiftPane} from "./ScheduleAndShiftsCreationComponents/EditingShiftPane.tsx";
 
 type WeeklyShiftCreatorPanelProps = {
@@ -16,7 +16,7 @@ type WeeklyShiftCreatorPanelProps = {
 
 const WeeklyShiftCreatorPanel = ({ onClose, saveEditingShiftToSchedule, shiftsSchedule, nextWeeksDayDates, onSubmitSchedule }: WeeklyShiftCreatorPanelProps) => {
 
-    const [editingShift, setEditingShift] = useState<EditingShift | undefined>(undefined);
+    const [editingShift, setEditingShift] = useState<ShiftMetadata | undefined>(undefined);
 
     const days = nextWeeksDayDates.map(date =>
         <p key={date.toISOString()} className="bg-custom-pastel-green rounded-lg items-center text-center italic pb-1">

@@ -2,14 +2,14 @@ import {ShiftTypeLabel} from "./ShiftTypesAndTimeDisplayElements.tsx";
 import {isSameDay} from "./SameDateCheck.ts";
 import {ShiftTimePane} from "./ShiftTimePane.tsx";
 import {TiPlus} from "react-icons/ti";
-import {EditingShift, ShiftMetadata, ShiftType} from "./Types.ts";
+import {ShiftMetadata, ShiftType} from "./Types.ts";
 import { MdOutlineModeEdit } from "react-icons/md";
 
 export type ShiftScheduleGridProps = {
     shiftTypes: ShiftType[];
     nextWeeksDayDates: Date[];
     shiftsSchedule: ShiftMetadata[];
-    setEditingShift: (shift: EditingShift | undefined) => void;
+    setEditingShift: (shift: ShiftMetadata | undefined) => void;
 };
 
 export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedule, setEditingShift }: ShiftScheduleGridProps) => {
