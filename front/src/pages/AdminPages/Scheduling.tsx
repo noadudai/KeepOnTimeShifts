@@ -6,11 +6,11 @@ import {
     AllShiftTypes,
     ShiftMetadataWithEndDate
 } from "../../components/ScheduleAndShiftsCreationComponents/Types.ts";
-import {CreateNewScheduleModel} from "@noadudai/scheduler-backend-client";
 import {useCreateNewShiftsSchedule, useQueryAllSchedules} from "../../apis.ts";
-import {DAYS} from "../../components/ScheduleAndShiftsCreationComponents/Days.ts";
+import {CreateNewScheduleModel} from "@noadudai/scheduler-backend-client/dist/api";
 import {getNextWeeksDates} from "../../components/ScheduleAndShiftsCreationComponents/NextWeeksDates.ts";
 import {isScheduleSaved} from "../../components/ScheduleAndShiftsCreationComponents/ScheduleSavedCheck.ts";
+import {DAYS} from "../../components/ScheduleAndShiftsCreationComponents/Days.ts";
 
 const Scheduling = () => {
     const nextWeeksDayDates: Date[] = getNextWeeksDates();

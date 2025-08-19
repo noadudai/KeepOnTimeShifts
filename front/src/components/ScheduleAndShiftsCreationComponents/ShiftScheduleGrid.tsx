@@ -2,14 +2,15 @@ import {ShiftTypeLabel} from "./ShiftTypesAndTimeDisplayElements.tsx";
 import {isSameDay} from "./SameDateCheck.ts";
 import {ShiftTimePane} from "./ShiftTimePane.tsx";
 import {TiPlus} from "react-icons/ti";
-import {EditingShift, ShiftMetadata, ShiftType} from "./Types.ts";
+import {ShiftMetadata, ShiftType} from "./Types.ts";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 export type ShiftScheduleGridProps = {
     shiftTypes: ShiftType[];
     nextWeeksDayDates: Date[];
     shiftsSchedule: ShiftMetadata[];
-    setEditingShift?: (shift: EditingShift | undefined) => void;
-    mode: "edit" | "view";
+    setEditingShift: (shift: ShiftMetadata | undefined) => void;
+    mode: "edit" | "view"
 };
 
 export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedule, setEditingShift, mode }: ShiftScheduleGridProps) => {
@@ -33,50 +34,56 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
                          const shiftEndTime = shift.endDateAndTime;
                          const shiftStartTime = shift.startDateAndTime;
 
-                         // "shiftEndTime !== undefined" means the manager created/set the shift for next week
-                         const isShiftReadyForSchedule = shiftEndTime !== undefined;
-                         return (
-                             <div key={`${sType}-${date.toISOString()}`}>
-                                 <div
-                                     className={`border border-gray-100 rounded-lg w-full h-20 flex justify-center items-center ${
-                                         isShiftReadyForSchedule ? 'bg-custom-cream-warm' : 'bg-custom-cream'
-                                     }`}
-                                 >
-                                     {isShiftReadyForSchedule ?
-                                         (
-                                             <div className="flex flex-col gap-2">
-                                                 <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftStartTime}
-                                                                label={"Starts"}/>
-                                                 <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftEndTime}
-                                                                label={"Ends"}/>
-                                             </div>
-                                         ) : mode === "edit" && setEditingShift ?
-                                             (
-                                                 <button className="text-custom-pastel-green"
-                                                         onClick={() => {
-                                                             setEditingShift({
-                                                                 id: shift.id,
-                                                                 startDateAndTime: shiftStartTime,
-                                                                 endDateAndTime: shiftEndTime
-                                                             })
-                                                         }}>
-                                                     <TiPlus size={35}/>
-                                                 </button>
-                                             ) :
-                                             <></>
-                                     }
-                                 </div>
-                             </div>
-                         );
-                     } else {
-                         return (
-                             <div className="border border-gray-100 rounded-lg w-full h-20 flex justify-center items-center ${
-                                        bg-custom-cream">
-                                 {/*<p> This shift doesnt exist</p>*/}
-                             </div>); // Later, loading shift animation
-                     }
-                 })}
-             </div>
-         ))}
-     </>
-};
+                        // "shiftEndTime !== undefined" means the manager created/set the shift for next week
+                        const isShiftReadyForSchedule = shiftEndTime !== undefined;
+                        return(
+                            <div  key={`${sType}-${date.toISOString()}`}>
+                                <div
+                                    className={`border border-gray-100 rounded-lg w-full h-20 flex justify-center items-center ${
+                                        isShiftReadyForSchedule ? 'bg-custom-cream-warm' : 'bg-custom-cream'
+                                    }`}
+                                >
+                                    {isShiftReadyForSchedule ?
+                                        (
+                                            <div className="flex flex-row gap-2">
+
+                                                <div className="flex flex-row gap-2">
+                                                    <div>
+                                                        <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftStartTime}
+                                                                       label={"Starts"}/>
+                                                        <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftEndTime}
+                                                                       label={"Ends"}/>
+                                                    </div>
+                                                    <button className="bg-custom-pastel-green rounded-full"
+                                                            onClick={() => {
+                                                                setEditingShift(shift)
+                                                            }}>
+                                                        <MdOutlineModeEdit size={20}/>
+                                                    </button>
+
+                                                </div>
+
+                                            </div>
+                                        ) : mode === "edit" && setEditingShift ?
+                                            (
+                                            <button className="text-custom-pastel-green"
+                                                        onClick={() => {
+                                                            setEditingShift(shift)
+                                                        }}>
+                                                    <TiPlus size={35}/>
+                                            </button>
+                                        ) : <></>
+                                    }
+                                </div>
+                            </div>
+                        );
+                    } else {
+                        return (
+                            <div className="border border-gray-100 rounded-lg w-full h-20 flex justify-center items-center bg-custom-cream">
+                                {/*<p> This shift doesnt exist</p> // Later, loading shift animation*/}
+                            </div>
+                        );}
+                })}
+            </div>
+        ))}
+    </>};
