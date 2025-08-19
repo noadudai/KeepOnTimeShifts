@@ -6,7 +6,7 @@ import {
 } from "@noadudai/scheduler-backend-client/api.ts";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {useAuth0} from "@auth0/auth0-react";
-import {ScheduleModel} from "@noadudai/scheduler-backend-client";
+import {CreateNewScheduleModel} from "@noadudai/scheduler-backend-client";
 
 
 const ax = axios.create({
@@ -21,7 +21,7 @@ export const useCreateNewShiftsSchedule = () => {
     const {getAccessTokenSilently} = useAuth0();
 
     return useMutation({
-        mutationFn: async (data: ScheduleModel) => {
+        mutationFn: async (data: CreateNewScheduleModel) => {
             const token = await getAccessTokenSilently();
 
             const response = await managerActionsApi.managerScheduleActionsCreateSchedulePost(data, {

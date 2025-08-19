@@ -2,13 +2,14 @@ import {ShiftTypeLabel} from "./ShiftTypesAndTimeDisplayElements.tsx";
 import {isSameDay} from "./SameDateCheck.ts";
 import {ShiftTimePane} from "./ShiftTimePane.tsx";
 import {TiPlus} from "react-icons/ti";
-import {EditingShift, ShiftMetadata, ShiftType} from "./Types.ts";
+import {ShiftMetadata, ShiftType} from "./Types.ts";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 export type ShiftScheduleGridProps = {
     shiftTypes: ShiftType[];
     nextWeeksDayDates: Date[];
     shiftsSchedule: ShiftMetadata[];
-    setEditingShift: (shift: EditingShift | undefined) => void;
+    setEditingShift: (shift: ShiftMetadata | undefined) => void;
 };
 
 export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedule, setEditingShift }: ShiftScheduleGridProps) => {
@@ -34,14 +35,21 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
                                 >
                                     {isShiftReadyForSchedule ?
                                         (
-                                            <div className="flex flex-col gap-2">
-                                                <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftStartTime} label={"Starts"}/>
-                                                <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftEndTime} label={"Ends"}/>
+                                            <div className="flex flex-row gap-2">
+
+                                                <div className="flex flex-col gap-1">
+                                                    <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftStartTime} label={"Starts"}/>
+                                                    <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftEndTime} label={"Ends"}/>
+                                                </div>
+                                                <button className="bg-custom-pastel-green rounded-full"
+                                                onClick={() => {setEditingShift(shift)}}>
+                                                    <MdOutlineModeEdit size={20}/>
+                                                </button>
                                             </div>
                                         ) :
                                         (
                                             <button className="text-custom-pastel-green"
-                                                    onClick={() => {setEditingShift({id: shift.id, startDateAndTime: shiftStartTime, endDateAndTime: shiftEndTime})}}>
+                                                    onClick={() => {setEditingShift(shift)}}>
                                                 <TiPlus size={35}/>
                                             </button>
                                         )

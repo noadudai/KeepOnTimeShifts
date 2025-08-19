@@ -2,8 +2,8 @@ import WeeklyShiftCreatorPanel from "../../components/WeeklyShiftCreatorPanel.ts
 import {useState} from "react";
 import {Guid} from "guid-typescript";
 import {ShiftMetadata, AllShiftTypes} from "../../components/ScheduleAndShiftsCreationComponents/Types.ts";
-import {ScheduleModel} from "@noadudai/scheduler-backend-client";
 import {useCreateNewShiftsSchedule} from "../../apis.ts";
+import {CreateNewScheduleModel} from "@noadudai/scheduler-backend-client/dist/api";
 
 type ShiftMetadataWithEndDate = ShiftMetadata & {endDateAndTime: Date};
 
@@ -36,7 +36,7 @@ const Scheduling = () => {
     const mutation = useCreateNewShiftsSchedule();
 
     const submitShiftsSchedule = (shiftsForMutation.length > 0 ? () => {
-        const data: ScheduleModel = {shifts: shiftsForMutation.map((shift) =>
+        const data: CreateNewScheduleModel = { shifts: shiftsForMutation.map((shift) =>
                 ({
                     shiftStartTime: shift.startDateAndTime.toISOString(),
                     shiftEndTime: shift.endDateAndTime.toISOString(),
@@ -46,6 +46,7 @@ const Scheduling = () => {
         mutation.mutate(data);
 
         setIsCreatingShiftsOpen(false);
+        setShiftsSchedule(initialState)
     } : undefined);
 
     return (
