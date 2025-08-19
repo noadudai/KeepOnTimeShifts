@@ -80,7 +80,7 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
                     } else {
                         return (
                             <div className="border border-gray-100 rounded-lg w-full h-20 flex justify-center items-center bg-custom-cream">
-                                {/*<p> This shift doesnt exist</p> // Later, loading shift animation*/}
+                                {/*Later, loading shift animation if the component is waiting for the response from db */}
                             </div>
                         );}
                 })}
