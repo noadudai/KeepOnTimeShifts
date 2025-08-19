@@ -22,7 +22,7 @@ const Scheduling = () => {
     const [shiftsSchedule, setShiftsSchedule] = useState<ShiftMetadata[]>(initialState);
 
     const {data: schedulesResponse, refetch} = useQueryAllSchedules();
-    const schedules = schedulesResponse?.schedules ?? [];
+    const schedules = schedulesResponse?.schedules ?? []; // making the response easy to use, without unnecessary "?" everywhere
     const ShiftsSchedules = schedules.map(s => ({
         ...s,
         shifts: s.shifts ?? [],
