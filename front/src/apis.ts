@@ -36,7 +36,7 @@ export const useCreateNewShiftsSchedule = () => {
 }
 
 
-export const useQueryAllSchedules = () => {
+export const useQueryAllSchedulesDescending = () => {
     return useQuery({
         queryKey: ["schedule"],
         queryFn: async () => {
