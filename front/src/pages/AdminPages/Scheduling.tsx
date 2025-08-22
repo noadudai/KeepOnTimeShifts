@@ -21,7 +21,7 @@ const Scheduling = () => {
     })).flat();
     const [shiftsSchedule, setShiftsSchedule] = useState<ShiftMetadata[]>(initialState);
 
-    const {data: schedulesResponse, refetch} = useQueryAllSchedulesDescending();
+    const {data: schedulesResponse} = useQueryAllSchedulesDescending();
     const schedules = schedulesResponse?.schedules ?? []; // making the response easy to use, without unnecessary "?" everywhere
     const ShiftsSchedules = schedules.map(s => ({
         ...s,
@@ -59,7 +59,6 @@ const Scheduling = () => {
         mutation.mutate(data);
 
         setIsWeeklyShiftPanelOpen(false);
-        refetch();
     } : undefined);
 
     const today = new Date();
