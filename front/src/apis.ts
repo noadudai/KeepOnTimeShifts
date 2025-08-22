@@ -19,6 +19,7 @@ const managerActionsApi = new ManagerScheduleActionsApi(undefined, undefined, ax
 
 export const useCreateNewShiftsSchedule = () => {
     const {getAccessTokenSilently} = useAuth0();
+    const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: async (data: CreateNewScheduleModel) => {
@@ -31,8 +32,21 @@ export const useCreateNewShiftsSchedule = () => {
             });
 
             return response;
+        }, onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['allSchedules'] });
         }
     });
+}
+
+
+export const useQueryAllSchedulesDescending = () => {
+    return useQuery({
+        queryKey: ["allSchedules"],
+        queryFn: async () => {
+            const response =  await managerActionsApi.managerScheduleActionsSchedulesDescendingGet();
+            return response.data;
+        }
+    })
 }
 
 
