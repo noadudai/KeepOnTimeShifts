@@ -30,60 +30,55 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
                  {nextWeeksDayDates.map((date) => {
                      const shift = shiftsSchedule.find(s => s.shiftType === sType && isSameDay(s.startDateAndTime, date));
 
-                     if (shift) {
-                         const shiftEndTime = shift.endDateAndTime;
-                         const shiftStartTime = shift.startDateAndTime;
-
                         // "shiftEndTime !== undefined" means the manager created/set the shift for next week
-                        const isShiftReadyForSchedule = shiftEndTime !== undefined;
-                        return(
-                            <div  key={`${sType}-${date.toISOString()}`}>
-                                <div
-                                    className={`border border-gray-100 rounded-lg w-full h-20 flex justify-center items-center ${
-                                        isShiftReadyForSchedule ? 'bg-custom-cream-warm' : 'bg-custom-cream'
-                                    }`}
-                                >
-                                    {isShiftReadyForSchedule ?
-                                        (
+                        return shift? (<div key={`${sType}-${date.toISOString()}`}>
+                            <div
+                                className={`border border-gray-100 rounded-lg w-full h-20 flex justify-center items-center ${
+                                    shift.endDateAndTime !== undefined ? 'bg-custom-cream-warm' : 'bg-custom-cream'
+                                }`}
+                            >
+                                {shift.endDateAndTime !== undefined ?
+                                    (
+                                        <div className="flex flex-row gap-2">
+
                                             <div className="flex flex-row gap-2">
-
-                                                <div className="flex flex-row gap-2">
-                                                    <div>
-                                                        <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftStartTime}
-                                                                       label={"Starts"}/>
-                                                        <ShiftTimePane dayClickedInWeek={date} timeToRender={shiftEndTime}
-                                                                       label={"Ends"}/>
-                                                    </div>
-                                                    <button className="bg-custom-pastel-green rounded-full"
-                                                            onClick={() => {
-                                                                setEditingShift(shift)
-                                                            }}>
-                                                        <MdOutlineModeEdit size={20}/>
-                                                    </button>
-
+                                                <div>
+                                                    <ShiftTimePane dayClickedInWeek={date}
+                                                                   timeToRender={shift.startDateAndTime}
+                                                                   label={"Starts"}/>
+                                                    <ShiftTimePane dayClickedInWeek={date}
+                                                                   timeToRender={shift.endDateAndTime}
+                                                                   label={"Ends"}/>
                                                 </div>
-
-                                            </div>
-                                        ) : mode === "edit"?
-                                            (
-                                            <button className="text-custom-pastel-green"
+                                                <button className="bg-custom-pastel-green rounded-full"
                                                         onClick={() => {
                                                             setEditingShift(shift)
                                                         }}>
-                                                    <TiPlus size={35}/>
+                                                    <MdOutlineModeEdit size={20}/>
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+                                    ) : mode === "edit" ?
+                                        (
+                                            <button className="text-custom-pastel-green"
+                                                    onClick={() => {
+                                                        setEditingShift(shift)
+                                                    }}>
+                                                <TiPlus size={35}/>
                                             </button>
                                         ) : <></>
-                                    }
-                                </div>
+                                }
                             </div>
-                        );
-                    } else {
-                        return (
-                            <div className="border border-gray-100 rounded-lg w-full h-20 flex justify-center items-center bg-custom-cream">
+                        </div>) : (
+                            <div
+                                className="border border-gray-100 rounded-lg w-full h-20 flex justify-center items-center bg-custom-cream">
                                 {/*Later, loading shift animation if the component is waiting for the response from db */}
                             </div>
-                        );}
-                })}
-            </div>
-        ))}
-    </>};
+                        )
+                 })}
+             </div>
+         ))}
+    </>
+};
