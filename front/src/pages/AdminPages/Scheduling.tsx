@@ -9,7 +9,7 @@ import {
 import {useCreateNewShiftsSchedule, useQueryAllSchedulesDescending} from "../../apis.ts";
 import {CreateNewScheduleModel} from "@noadudai/scheduler-backend-client/dist/api";
 import {getNextWeeksDates} from "../../components/ScheduleAndShiftsCreationComponents/NextWeeksDates.ts";
-import {isThereAScheduleForNextWeek} from "../../components/ScheduleAndShiftsCreationComponents/ScheduleSavedCheck.ts";
+import {scheduleIsForNextWeek} from "../../components/ScheduleAndShiftsCreationComponents/ScheduleIsForNextWeekCheck.ts";
 import {DAYS} from "../../components/ScheduleAndShiftsCreationComponents/Days.ts";
 
 const Scheduling = () => {
@@ -28,7 +28,7 @@ const Scheduling = () => {
         shifts: s.shifts ?? [],
     }));
 
-    const scheduleSaved = ShiftsSchedules.length > 0 ? isThereAScheduleForNextWeek({schedule: ShiftsSchedules.at(0)!, nextWeeksDayDates:nextWeeksDayDates}) : false;
+    const scheduleSaved = ShiftsSchedules.length > 0 ? scheduleIsForNextWeek({schedule: ShiftsSchedules.at(0)!, nextWeeksDayDates:nextWeeksDayDates}) : false;
 
     const scheduleToRender: ShiftMetadata[] =
         // if the schedule is true, then there is a schedule in the first index
