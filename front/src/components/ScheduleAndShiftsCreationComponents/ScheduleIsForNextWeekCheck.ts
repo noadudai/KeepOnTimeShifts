@@ -1,17 +1,21 @@
 import {ScheduleModel, ShiftModel} from "@noadudai/scheduler-backend-client";
 
 type scheduleIsForNextWeekProps = {
-    schedule: {shifts: ShiftModel[], schedule: ScheduleModel | null},
+    schedules: {shifts: ShiftModel[], schedule: ScheduleModel | null}[],
     nextWeeksDayDates: Date[]
 };
 
-export const scheduleIsForNextWeek = ({schedule, nextWeeksDayDates} : scheduleIsForNextWeekProps) => {
-    if (schedule.shifts.length == 0) return false;
+export const isShiftInNextWeek = ((shift: ShiftModel, nextWeeksDayDates: Date[]) => {
+    const shiftDate = new Date(shift.shiftStartTime);
+    return nextWeeksDayDates.some(dateInNextWeek =>
+        shiftDate.toDateString() === dateInNextWeek.toDateString()
+    );
+});
 
-    return schedule.shifts.every((shift: ShiftModel) => {
-        const shiftDate = new Date(shift.shiftStartTime);
-        return nextWeeksDayDates.some(dateInNextWeek =>
-            shiftDate.toDateString() === dateInNextWeek.toDateString()
-        );
+export const scheduleIsForNextWeek = ({schedules, nextWeeksDayDates} : scheduleIsForNextWeekProps) => {
+    return schedules.some((schedule) => {
+        if (schedule.shifts.length == 0) return false;
+
+        return schedule.shifts.every((shift: ShiftModel) => isShiftInNextWeek(shift, nextWeeksDayDates));
     });
 };

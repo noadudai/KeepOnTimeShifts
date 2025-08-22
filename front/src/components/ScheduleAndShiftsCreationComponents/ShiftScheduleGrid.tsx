@@ -19,6 +19,7 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
             {date.toLocaleDateString('en-us', { weekday: 'short', day: "numeric", month: "numeric" })}
         </p>);
 
+
     return <>
          <div className="grid grid-cols-8 w-full h-full gap-4">
              <span className="bg-custom-pastel-green rounded-lg text-2xl text-center italic"/>
@@ -29,50 +30,52 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
                  <ShiftTypeLabel shiftType={sType}/>
                  {nextWeeksDayDates.map((date) => {
                      const shift = shiftsSchedule.find(s => s.shiftType === sType && isSameDay(s.startDateAndTime, date));
-
+                     const isEditMode = mode === "edit";
                         // "shiftEndTime !== undefined" means the manager created/set the shift for next week
-                        return shift? (<div key={`${sType}-${date.toISOString()}`}>
-                            <div
-                                className={`border border-gray-100 rounded-lg w-full h-20 flex justify-center items-center ${
-                                    shift.endDateAndTime !== undefined ? 'bg-custom-cream-warm' : 'bg-custom-cream'
-                                }`}
-                            >
-                                {shift.endDateAndTime !== undefined ?
-                                    (
-                                        <div className="flex flex-row gap-2">
-
+                        return shift? (
+                            <div key={`${sType}-${date.toISOString()}`}>
+                                <div
+                                    className={`border border-gray-100 rounded-lg w-full h-20 flex justify-center items-center ${
+                                        shift.endDateAndTime !== undefined ? 'bg-custom-cream-warm' : 'bg-custom-cream'
+                                    }`}
+                                >
+                                    {shift.endDateAndTime !== undefined ?
+                                        (
                                             <div className="flex flex-row gap-2">
-                                                <div>
-                                                    <ShiftTimePane dayClickedInWeek={date}
-                                                                   timeToRender={shift.startDateAndTime}
-                                                                   label={"Starts"}/>
-                                                    <ShiftTimePane dayClickedInWeek={date}
-                                                                   timeToRender={shift.endDateAndTime}
-                                                                   label={"Ends"}/>
+
+                                                <div className="flex flex-row gap-2">
+                                                    <div>
+                                                        <ShiftTimePane dayClickedInWeek={date}
+                                                                       timeToRender={shift.startDateAndTime}
+                                                                       label={"Starts"}/>
+                                                        <ShiftTimePane dayClickedInWeek={date}
+                                                                       timeToRender={shift.endDateAndTime}
+                                                                       label={"Ends"}/>
+                                                    </div>
+                                                    {isEditMode && (
+                                                        <button className="bg-custom-pastel-green rounded-full"
+                                                                onClick={() => {
+                                                                    setEditingShift(shift)
+                                                                }}>
+                                                            <MdOutlineModeEdit size={20}/>
+                                                        </button>
+                                                    )}
                                                 </div>
-                                                <button className="bg-custom-pastel-green rounded-full"
+
+                                            </div>
+                                        ) : isEditMode ?
+                                            (
+                                                <button className="text-custom-pastel-green"
                                                         onClick={() => {
                                                             setEditingShift(shift)
                                                         }}>
-                                                    <MdOutlineModeEdit size={20}/>
+                                                    <TiPlus size={35}/>
                                                 </button>
-
-                                            </div>
-
-                                        </div>
-                                    ) : mode === "edit" ?
-                                        (
-                                            <button className="text-custom-pastel-green"
-                                                    onClick={() => {
-                                                        setEditingShift(shift)
-                                                    }}>
-                                                <TiPlus size={35}/>
-                                            </button>
-                                        ) : <></>
-                                }
-                            </div>
+                                            ) : <></>
+                                    }
+                                </div>
                         </div>) : (
-                            <div
+                            <div key={`${sType}-${date.toISOString()}`}
                                 className="border border-gray-100 rounded-lg w-full h-20 flex justify-center items-center bg-custom-cream">
                                 {/*Later, loading shift animation if the component is waiting for the response from db */}
                             </div>

@@ -9,7 +9,10 @@ import {
 import {useCreateNewShiftsSchedule, useQueryAllSchedulesDescending} from "../../apis.ts";
 import {CreateNewScheduleModel} from "@noadudai/scheduler-backend-client/dist/api";
 import {getNextWeeksDates} from "../../components/ScheduleAndShiftsCreationComponents/NextWeeksDates.ts";
-import {scheduleIsForNextWeek} from "../../components/ScheduleAndShiftsCreationComponents/ScheduleIsForNextWeekCheck.ts";
+import {
+    isShiftInNextWeek,
+    scheduleIsForNextWeek
+} from "../../components/ScheduleAndShiftsCreationComponents/ScheduleIsForNextWeekCheck.ts";
 import {DAYS} from "../../components/ScheduleAndShiftsCreationComponents/Days.ts";
 
 const Scheduling = () => {
@@ -28,11 +31,11 @@ const Scheduling = () => {
         shifts: s.shifts ?? [],
     }));
 
-    const scheduleSaved = ShiftsSchedules.length > 0 ? scheduleIsForNextWeek({schedule: ShiftsSchedules.at(0)!, nextWeeksDayDates:nextWeeksDayDates}) : false;
+    const isScheduleScheduleForNextWeek = ShiftsSchedules.length > 0 ? scheduleIsForNextWeek({schedules: ShiftsSchedules, nextWeeksDayDates:nextWeeksDayDates}) : false;
 
-    const scheduleToRender: ShiftMetadata[] =
-        // if the schedule is true, then there is a schedule in the first index
-        scheduleSaved ? ShiftsSchedules.at(0)!.shifts.map((shift) =>
+    const nextWeeksSchedule = ShiftsSchedules.find(schedule => schedule.shifts.every(shift => isShiftInNextWeek(shift, nextWeeksDayDates)))
+
+    const nextWeeksShifts: ShiftMetadata[] = isScheduleScheduleForNextWeek ? nextWeeksSchedule!.shifts.map((shift) =>
         {return {id: Guid.create(), shiftType: shift.shiftType, startDateAndTime: new Date(shift.shiftStartTime), endDateAndTime: new Date(shift.shiftEndTime)}}) : [];
 
     // Only the shifts that have a defined endDateAndTime, are shifts that the manager created for the schedule.
@@ -70,7 +73,7 @@ const Scheduling = () => {
             <div className="p-5 group relative">
                 <button
                     className={`rounded-lg bg-custom-cream-warm group-hover:bg-custom-cream-warm/80 transition-colors p-4 border-2
-                        ${scheduleSaved ? `border-custom-pastel-green`
+                        ${isScheduleScheduleForNextWeek ? `border-custom-pastel-green`
                             : todayIsNotYetWednesday ? `border-orange-400`
                             : todayIsWednesday ? `border-custom-warm-coral-pink`
                                 : ``}`}
@@ -78,17 +81,17 @@ const Scheduling = () => {
                     Next Week's Shifts
                 </button>
                 <div className="opacity-0 group-hover:opacity-100 transition-all text-xs">
-                    {scheduleSaved ? "" : todayIsNotYetWednesday ? "Create next week's shifts" : todayIsWednesday ? "Last day to create next week's shifts!!" : ""}
+                    {isScheduleScheduleForNextWeek ? "" : todayIsNotYetWednesday ? "Create next week's shifts" : todayIsWednesday ? "Last day to create next week's shifts!!" : ""}
                 </div>
             </div>
 
             {isWeeklyShiftPanelOpen && <WeeklyShiftPanel
                 onClose={() => setIsWeeklyShiftPanelOpen(false)}
                 saveEditingShiftToSchedule={saveEditingShiftToSchedule}
-                shiftsSchedule={scheduleSaved ? scheduleToRender : shiftsSchedule}
+                shiftsSchedule={isScheduleScheduleForNextWeek ? nextWeeksShifts : shiftsSchedule}
                 nextWeeksDayDates={nextWeeksDayDates}
                 onSubmitSchedule={submitShiftsSchedule}
-                mode={scheduleSaved ? "view" : "edit"}
+                mode={isScheduleScheduleForNextWeek ? "view" : "edit"}
                 />
             }
         </div>
