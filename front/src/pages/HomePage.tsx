@@ -1,9 +1,7 @@
-import {HomePageNavbar} from "../components/HomePageNavbar.tsx";
-import VacationsPanel from "../components/UserVacationsComponent/VacationsPanel.tsx";
-
+import { HomePageNavbar } from '../components/HomePageNavbar.tsx';
+import VacationsPanel from '../components/UserVacationsComponent/VacationsPanel.tsx';
 
 const HomePage = () => {
-
     return (
         <div>
             <HomePageNavbar />
@@ -11,11 +9,10 @@ const HomePage = () => {
                 <div className="w-2/3 m-20 rounded-xl bg-white">
                     <VacationsPanel />
                 </div>
-                <div className="w-2/3 m-20 rounded-xl bg-white">
-                </div>
+                <div className="w-2/3 m-20 rounded-xl bg-white"></div>
             </div>
         </div>
     );
-}
+};
 
 export default HomePage;

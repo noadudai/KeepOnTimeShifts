@@ -1,11 +1,16 @@
-import {Link} from "react-router-dom";
-import {RedirectLoginOptions} from "@auth0/auth0-react";
+import { Link } from 'react-router-dom';
+import { RedirectLoginOptions } from '@auth0/auth0-react';
 
-export const InfoPageNavBar = ({isAuthenticated, loginWithRedirect} : {isAuthenticated: boolean, loginWithRedirect: (options?: RedirectLoginOptions) => Promise<void>}) => {
-
+export const InfoPageNavBar = ({
+    isAuthenticated,
+    loginWithRedirect,
+}: {
+    isAuthenticated: boolean;
+    loginWithRedirect: (options?: RedirectLoginOptions) => Promise<void>;
+}) => {
     const handleLogin = () => {
         loginWithRedirect();
-    }
+    };
 
     return (
         <div>
@@ -16,12 +21,14 @@ export const InfoPageNavBar = ({isAuthenticated, loginWithRedirect} : {isAuthent
                     </div>
                     <div className="flex items-center justify-between p-2">
                         {isAuthenticated ? (
-                            <div
-                                className="bg-green-300 text-green-950 font-medium border border-green-950 hover:bg-green-200 hover:text-green-900 px-3 py-2 mx-0.5 rounded-lg">
+                            <div className="bg-green-300 text-green-950 font-medium border border-green-950 hover:bg-green-200 hover:text-green-900 px-3 py-2 mx-0.5 rounded-lg">
                                 <Link to="/">Home page</Link>
                             </div>
                         ) : (
-                            <button onClick={handleLogin} className="bg-green-300 text-green-950 font-medium border border-green-950 hover:bg-green-200 hover:text-green-900 px-3 py-2 mx-0.5 rounded-lg">
+                            <button
+                                onClick={handleLogin}
+                                className="bg-green-300 text-green-950 font-medium border border-green-950 hover:bg-green-200 hover:text-green-900 px-3 py-2 mx-0.5 rounded-lg"
+                            >
                                 Login
                             </button>
                         )}
@@ -30,4 +37,4 @@ export const InfoPageNavBar = ({isAuthenticated, loginWithRedirect} : {isAuthent
             </nav>
         </div>
     );
-}
+};
