@@ -9,10 +9,7 @@ import {
 import {useCreateNewShiftsSchedule, useQueryAllSchedulesDescending} from "../../apis.ts";
 import {CreateNewScheduleModel} from "@noadudai/scheduler-backend-client/dist/api";
 import {getNextWeeksDates} from "../../components/ScheduleAndShiftsCreationComponents/NextWeeksDates.ts";
-import {
-    isShiftInNextWeek,
-    scheduleIsForNextWeek
-} from "../../components/ScheduleAndShiftsCreationComponents/ScheduleIsForNextWeekCheck.ts";
+import { scheduleIsInGivenDateRange } from "../../components/ScheduleAndShiftsCreationComponents/ScheduleIsForNextWeekCheck.ts";
 import {DAYS} from "../../components/ScheduleAndShiftsCreationComponents/Days.ts";
 
 const Scheduling = () => {
@@ -25,17 +22,15 @@ const Scheduling = () => {
     const [shiftsSchedule, setShiftsSchedule] = useState<ShiftMetadata[]>(initialState);
 
     const {data: schedulesResponse} = useQueryAllSchedulesDescending();
-    const schedules = schedulesResponse?.schedules ?? []; // making the response easy to use, without unnecessary "?" everywhere
-    const ShiftsSchedules = schedules.map(s => ({
-        ...s,
-        shifts: s.shifts ?? [],
+    const schedules = schedulesResponse?.schedules ?? []; // the schedules from the api can be possibly null
+    const ShiftsSchedules = schedules.map(schedule => ({ // the schedule's shifts from the api can be possibly null
+        ...schedule,
+        shifts: schedule.shifts ?? [],
     }));
 
-    const isScheduleScheduleForNextWeek = ShiftsSchedules.length > 0 ? scheduleIsForNextWeek({schedules: ShiftsSchedules, nextWeeksDayDates:nextWeeksDayDates}) : false;
+    const isScheduleForNextWeek = ShiftsSchedules.length > 0 ? scheduleIsInGivenDateRange({schedules: ShiftsSchedules, dateRange:nextWeeksDayDates}) : undefined;
 
-    const nextWeeksSchedule = ShiftsSchedules.find(schedule => schedule.shifts.every(shift => isShiftInNextWeek(shift, nextWeeksDayDates)))
-
-    const nextWeeksShifts: ShiftMetadata[] = isScheduleScheduleForNextWeek ? nextWeeksSchedule!.shifts.map((shift) =>
+    const nextWeeksShifts: ShiftMetadata[] = isScheduleForNextWeek ? isScheduleForNextWeek.shifts.map((shift) =>
         {return {id: Guid.create(), shiftType: shift.shiftType, startDateAndTime: new Date(shift.shiftStartTime), endDateAndTime: new Date(shift.shiftEndTime)}}) : [];
 
     // Only the shifts that have a defined endDateAndTime, are shifts that the manager created for the schedule.
@@ -73,7 +68,7 @@ const Scheduling = () => {
             <div className="p-5 group relative">
                 <button
                     className={`rounded-lg bg-custom-cream-warm group-hover:bg-custom-cream-warm/80 transition-colors p-4 border-2
-                        ${isScheduleScheduleForNextWeek ? `border-custom-pastel-green`
+                        ${isScheduleForNextWeek ? `border-custom-pastel-green`
                             : todayIsNotYetWednesday ? `border-orange-400`
                             : todayIsWednesday ? `border-custom-warm-coral-pink`
                                 : ``}`}
@@ -81,17 +76,17 @@ const Scheduling = () => {
                     Next Week's Shifts
                 </button>
                 <div className="opacity-0 group-hover:opacity-100 transition-all text-xs">
-                    {isScheduleScheduleForNextWeek ? "" : todayIsNotYetWednesday ? "Create next week's shifts" : todayIsWednesday ? "Last day to create next week's shifts!!" : ""}
+                    {isScheduleForNextWeek ? "" : todayIsNotYetWednesday ? "Create next week's shifts" : todayIsWednesday ? "Last day to create next week's shifts!!" : ""}
                 </div>
             </div>
 
             {isWeeklyShiftPanelOpen && <WeeklyShiftPanel
                 onClose={() => setIsWeeklyShiftPanelOpen(false)}
                 saveEditingShiftToSchedule={saveEditingShiftToSchedule}
-                shiftsSchedule={isScheduleScheduleForNextWeek ? nextWeeksShifts : shiftsSchedule}
+                shiftsSchedule={isScheduleForNextWeek ? nextWeeksShifts : shiftsSchedule}
                 nextWeeksDayDates={nextWeeksDayDates}
                 onSubmitSchedule={submitShiftsSchedule}
-                mode={isScheduleScheduleForNextWeek ? "view" : "edit"}
+                mode={isScheduleForNextWeek ? "view" : "edit"}
                 />
             }
         </div>
