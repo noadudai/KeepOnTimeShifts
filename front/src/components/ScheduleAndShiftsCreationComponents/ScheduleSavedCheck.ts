@@ -1,11 +1,11 @@
 import {ScheduleModel, ShiftModel} from "@noadudai/scheduler-backend-client";
 
-type isScheduleSavedProps = {
+type isThereAScheduleForNextWeekProps = {
     schedule: {shifts: ShiftModel[], schedule: ScheduleModel | null},
     nextWeeksDayDates: Date[]
 };
 
-export const isThereAScheduleForNextWeek = ({schedule, nextWeeksDayDates} : isScheduleSavedProps) => {
+export const isThereAScheduleForNextWeek = ({schedule, nextWeeksDayDates} : isThereAScheduleForNextWeekProps) => {
 
     // .some on empty array returns true
     return schedule.shifts.every((shift: ShiftModel) => {
