@@ -6,7 +6,7 @@ import {
     AllShiftTypes,
     ShiftMetadataWithEndDate
 } from "../../components/ScheduleAndShiftsCreationComponents/Types.ts";
-import {useCreateNewShiftsSchedule, useQueryAllSchedules} from "../../apis.ts";
+import {useCreateNewShiftsSchedule, useQueryAllSchedulesDescending} from "../../apis.ts";
 import {CreateNewScheduleModel} from "@noadudai/scheduler-backend-client/dist/api";
 import {getNextWeeksDates} from "../../components/ScheduleAndShiftsCreationComponents/NextWeeksDates.ts";
 import {isScheduleSaved} from "../../components/ScheduleAndShiftsCreationComponents/ScheduleSavedCheck.ts";
@@ -21,7 +21,7 @@ const Scheduling = () => {
     })).flat();
     const [shiftsSchedule, setShiftsSchedule] = useState<ShiftMetadata[]>(initialState);
 
-    const {data: schedulesResponse, refetch} = useQueryAllSchedules();
+    const {data: schedulesResponse, refetch} = useQueryAllSchedulesDescending();
     const schedules = schedulesResponse?.schedules ?? []; // making the response easy to use, without unnecessary "?" everywhere
     const ShiftsSchedules = schedules.map(s => ({
         ...s,
@@ -29,6 +29,11 @@ const Scheduling = () => {
     }));
 
     const scheduleSaved = isScheduleSaved({schedules: ShiftsSchedules, nextWeeksDayDates:nextWeeksDayDates});
+
+    const scheduleToRender: ShiftMetadata[] =
+        // if the schedule is true, then there is a schedule in the first index
+        scheduleSaved ? ShiftsSchedules.at(0)!.shifts.map((shift) =>
+        {return {id: Guid.create(), shiftType: shift.shiftType, startDateAndTime: new Date(shift.shiftStartTime), endDateAndTime: new Date(shift.shiftEndTime)}}) : [];
 
     // Only the shifts that have a defined endDateAndTime, are shifts that the manager created for the schedule.
     const shiftHasEndDate = (shift: ShiftMetadata): shift is ShiftMetadataWithEndDate => {
@@ -41,10 +46,6 @@ const Scheduling = () => {
             prev.map((shift) =>
                 shift.id === shiftId ? { ...shift, startDateAndTime: startDateAndTime, endDateAndTime: endDateAndTime } : shift));
     };
-
-    const scheduleToRender: ShiftMetadata[] =
-        ShiftsSchedules.at(0)?.shifts.map((shift) =>
-        {return {id: Guid.create(), shiftType: shift.shiftType, startDateAndTime: new Date(shift.shiftStartTime), endDateAndTime: new Date(shift.shiftEndTime)}}) ?? [];
 
     const mutation = useCreateNewShiftsSchedule();
     const submitShiftsSchedule = (shiftsForMutation.length > 0 ? () => {

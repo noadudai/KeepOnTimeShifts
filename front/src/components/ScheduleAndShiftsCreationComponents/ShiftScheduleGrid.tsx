@@ -64,7 +64,7 @@ export const ShiftScheduleGrid = ({ shiftTypes, nextWeeksDayDates, shiftsSchedul
                                                 </div>
 
                                             </div>
-                                        ) : mode === "edit" && setEditingShift ?
+                                        ) : mode === "edit"?
                                             (
                                             <button className="text-custom-pastel-green"
                                                         onClick={() => {
