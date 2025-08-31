@@ -16,7 +16,7 @@ type WeeklyShiftCreatorPanelProps = {
     nextWeeksDayDates: Date[];
     onSubmitSchedule?: () => void;
     mode: 'edit' | 'view';
-    scheduleId: string | undefined | null;
+    scheduleIdToPublish: string | null;
 };
 
 const WeeklyShiftPanel = ({
@@ -26,7 +26,7 @@ const WeeklyShiftPanel = ({
                               nextWeeksDayDates,
                               onSubmitSchedule,
                               mode,
-                              scheduleId,
+                              scheduleIdToPublish,
                           }: WeeklyShiftCreatorPanelProps) => {
     const [editingShift, setEditingShift] = useState<ShiftMetadata | undefined>(undefined);
 
@@ -53,9 +53,9 @@ const WeeklyShiftPanel = ({
 
     const publishSchedule = () => {
 
-        if (scheduleId) {
+        if (scheduleIdToPublish) {
             const data: ChangeShiftsScheduleStatusModel = {
-                scheduleId: scheduleId,
+                scheduleId: scheduleIdToPublish,
                 status: ScheduleStatus.Published,
             };
 
@@ -105,8 +105,9 @@ const WeeklyShiftPanel = ({
                 ) : (
                     <button
                         onClick={publishSchedule}
-                        className="bg-custom-pastel-green text-center text-custom-cream rounded-full p-2 disabled:bg-gray-300 disabled:text-gray-950">
-                        Publish
+                        disabled={scheduleIdToPublish === null}
+                        className="bg-custom-pastel-green text-center text-custom-cream rounded-full p-2 disabled:bg-white">
+                        {scheduleIdToPublish === null ? '' : 'Publish'}
                     </button>
                 )}
                 {editingShift && (

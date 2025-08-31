@@ -7,7 +7,7 @@ import {
     ShiftMetadataWithEndDate,
 } from '../../components/ScheduleAndShiftsCreationComponents/Types.ts';
 import { useCreateNewShiftsSchedule, useQueryAllSchedulesDescending } from '../../apis.ts';
-import { CreateNewScheduleModel } from '@noadudai/scheduler-backend-client/dist/api';
+import { CreateNewScheduleModel, ScheduleStatus } from '@noadudai/scheduler-backend-client/dist/api';
 import { getNextWeeksDates } from '../../components/ScheduleAndShiftsCreationComponents/NextWeeksDates.ts';
 import {
     getScheduleInGivenDateRange,
@@ -43,7 +43,7 @@ const Scheduling = () => {
         dateRange: nextWeeksDayDates,
     });
 
-    const nextWeeksScheduleId = scheduleForNextWeek && scheduleForNextWeek.schedule?.id;
+    const nextWeeksScheduleId = scheduleForNextWeek && scheduleForNextWeek.schedule && scheduleForNextWeek.schedule.id;
 
     const nextWeeksShifts: ShiftMetadata[] = scheduleForNextWeek
         ? scheduleForNextWeek.shifts.map((shift) => {
@@ -139,7 +139,7 @@ const Scheduling = () => {
                     nextWeeksDayDates={nextWeeksDayDates}
                     onSubmitSchedule={submitShiftsSchedule}
                     mode={scheduleForNextWeek ? 'view' : 'edit'}
-                    scheduleId={nextWeeksScheduleId}
+                    scheduleIdToPublish={scheduleForNextWeek?.schedule?.status === ScheduleStatus.Published ? null : nextWeeksScheduleId}
                 />
             )}
         </div>
