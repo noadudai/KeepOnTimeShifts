@@ -11,13 +11,11 @@ export const isShiftInDateRange = (shift: ShiftModel, dateRange: Date[]) => {
 };
 
 export const getScheduleInGivenDateRange = ({
-                                                schedules,
-                                                dateRange,
-                                            }: scheduleIsInGivenDateRangeProps) => {
-    const schedule = schedules.find((schedule) => {
+    schedules,
+    dateRange,
+}: scheduleIsInGivenDateRangeProps) => {
+    return schedules.find((schedule) => {
         if (schedule.shifts.length == 0) return undefined;
         return schedule.shifts.every((shift) => isShiftInDateRange(shift, dateRange));
     });
-
-    return schedule ?? null;
 };

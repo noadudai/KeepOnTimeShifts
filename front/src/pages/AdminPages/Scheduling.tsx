@@ -7,11 +7,12 @@ import {
     ShiftMetadataWithEndDate,
 } from '../../components/ScheduleAndShiftsCreationComponents/Types.ts';
 import { useCreateNewShiftsSchedule, useQueryAllSchedulesDescending } from '../../apis.ts';
-import { CreateNewScheduleModel, ScheduleStatus } from '@noadudai/scheduler-backend-client/dist/api';
-import { getNextWeeksDates } from '../../components/ScheduleAndShiftsCreationComponents/NextWeeksDates.ts';
 import {
-    getScheduleInGivenDateRange,
-} from '../../components/ScheduleAndShiftsCreationComponents/ScheduleIsForNextWeekCheck.ts';
+    CreateNewScheduleModel,
+    ScheduleStatus,
+} from '@noadudai/scheduler-backend-client/dist/api';
+import { getNextWeeksDates } from '../../components/ScheduleAndShiftsCreationComponents/NextWeeksDates.ts';
+import { getScheduleInGivenDateRange } from '../../components/ScheduleAndShiftsCreationComponents/ScheduleIsForNextWeekCheck.ts';
 import { DAYS } from '../../components/ScheduleAndShiftsCreationComponents/Days.ts';
 
 const Scheduling = () => {
@@ -43,17 +44,17 @@ const Scheduling = () => {
         dateRange: nextWeeksDayDates,
     });
 
-    const nextWeeksScheduleId = scheduleForNextWeek && scheduleForNextWeek.schedule && scheduleForNextWeek.schedule.id;
+    const scheduleIdForNextWeek = scheduleForNextWeek?.schedule?.id;
 
     const nextWeeksShifts: ShiftMetadata[] = scheduleForNextWeek
         ? scheduleForNextWeek.shifts.map((shift) => {
-            return {
-                id: Guid.create(),
-                shiftType: shift.shiftType,
-                startDateAndTime: new Date(shift.shiftStartTime),
-                endDateAndTime: new Date(shift.shiftEndTime),
-            };
-        })
+              return {
+                  id: Guid.create(),
+                  shiftType: shift.shiftType,
+                  startDateAndTime: new Date(shift.shiftStartTime),
+                  endDateAndTime: new Date(shift.shiftEndTime),
+              };
+          })
         : [];
 
     // Only the shifts that have a defined endDateAndTime, are shifts that the manager created for the schedule.
@@ -71,10 +72,10 @@ const Scheduling = () => {
             prev.map((shift) =>
                 shift.id === shiftId
                     ? {
-                        ...shift,
-                        startDateAndTime: startDateAndTime,
-                        endDateAndTime: endDateAndTime,
-                    }
+                          ...shift,
+                          startDateAndTime: startDateAndTime,
+                          endDateAndTime: endDateAndTime,
+                      }
                     : shift,
             ),
         );
@@ -84,18 +85,19 @@ const Scheduling = () => {
     const submitShiftsSchedule =
         shiftsForMutation.length > 0
             ? () => {
-                const data: CreateNewScheduleModel = {
-                    shifts: shiftsForMutation.map((shift) => ({
-                        shiftStartTime: shift.startDateAndTime.toISOString(),
-                        shiftEndTime: shift.endDateAndTime.toISOString(),
-                        shiftType: shift.shiftType,
-                    })),
-                };
+                  const data: CreateNewScheduleModel = {
+                      shifts: shiftsForMutation.map((shift) => ({
+                          shiftStartTime: shift.startDateAndTime.toISOString(),
+                          shiftEndTime: shift.endDateAndTime.toISOString(),
+                          shiftType: shift.shiftType,
+                      })),
+                      status: 'Draft',
+                  };
 
-                mutation.mutate(data);
+                  mutation.mutate(data);
 
-                setIsWeeklyShiftPanelOpen(false);
-            }
+                  setIsWeeklyShiftPanelOpen(false);
+              }
             : undefined;
 
     const today = new Date();
@@ -108,14 +110,14 @@ const Scheduling = () => {
                 <button
                     className={`rounded-lg bg-custom-cream-warm group-hover:bg-custom-cream-warm/80 transition-colors p-4 border-2
                         ${
-                        scheduleForNextWeek
-                            ? `border-custom-pastel-green`
-                            : todayIsNotYetWednesday
-                                ? `border-orange-400`
-                                : todayIsWednesday
+                            scheduleForNextWeek
+                                ? `border-custom-pastel-green`
+                                : todayIsNotYetWednesday
+                                  ? `border-orange-400`
+                                  : todayIsWednesday
                                     ? `border-custom-warm-coral-pink`
                                     : ``
-                    }`}
+                        }`}
                     onClick={() => setIsWeeklyShiftPanelOpen(true)}
                 >
                     Next Week's Shifts
@@ -124,10 +126,10 @@ const Scheduling = () => {
                     {scheduleForNextWeek
                         ? ''
                         : todayIsNotYetWednesday
-                            ? 'Create next week\'s shifts'
-                            : todayIsWednesday
-                                ? 'Last day to create next week\'s shifts!!'
-                                : ''}
+                          ? "Create next week's shifts"
+                          : todayIsWednesday
+                            ? "Last day to create next week's shifts!!"
+                            : ''}
                 </div>
             </div>
 
@@ -139,7 +141,11 @@ const Scheduling = () => {
                     nextWeeksDayDates={nextWeeksDayDates}
                     onSubmitSchedule={submitShiftsSchedule}
                     mode={scheduleForNextWeek ? 'view' : 'edit'}
-                    scheduleIdToPublish={scheduleForNextWeek?.schedule?.status === ScheduleStatus.Published ? null : nextWeeksScheduleId}
+                    scheduleIdToPublish={
+                        scheduleForNextWeek?.schedule?.status === ScheduleStatus.Published
+                            ? undefined
+                            : (scheduleIdForNextWeek ?? undefined)
+                    }
                 />
             )}
         </div>
