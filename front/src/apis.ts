@@ -6,7 +6,11 @@ import {
 } from '@noadudai/scheduler-backend-client/api.ts';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth0 } from '@auth0/auth0-react';
-import { CreateNewScheduleModel } from '@noadudai/scheduler-backend-client';
+import {
+    ChangeShiftsScheduleStatusModel,
+    CreateNewScheduleModel,
+    ScheduleFetchingModel,
+} from '@noadudai/scheduler-backend-client';
 
 const ax = axios.create({
     baseURL: `${import.meta.env.VITE_BACKEND_BASE_URL}`,
@@ -14,6 +18,24 @@ const ax = axios.create({
 
 const api = new UserScheduleRequestApi(undefined, undefined, ax);
 const managerActionsApi = new ManagerScheduleActionsApi(undefined, undefined, ax);
+
+export const useChangeScheduleStatus = () => {
+    const { getAccessTokenSilently } = useAuth0();
+
+    return useMutation({
+        mutationFn: async (data: ChangeShiftsScheduleStatusModel) => {
+            const token = await getAccessTokenSilently();
+
+            const response = await managerActionsApi.managerScheduleActionsChangeScheduleStatusPost(data, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            return response;
+        },
+    });
+};
 
 export const useCreateNewShiftsSchedule = () => {
     const { getAccessTokenSilently } = useAuth0();
@@ -40,11 +62,20 @@ export const useCreateNewShiftsSchedule = () => {
     });
 };
 
-export const useQueryAllSchedulesDescending = () => {
+export const useQueryAllSchedulesInOrder = (data: ScheduleFetchingModel) => {
+    const { getAccessTokenSilently } = useAuth0();
     return useQuery({
-        queryKey: ['allSchedules'],
+        queryKey: ['allSchedules', data],
         queryFn: async () => {
-            const response = await managerActionsApi.managerScheduleActionsSchedulesDescendingGet();
+            const token = await getAccessTokenSilently();
+            const response = await managerActionsApi.managerScheduleActionsSchedulesPost(
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
             return response.data;
         },
     });
@@ -75,8 +106,8 @@ export const useQueryCurrentUserFutureVacations = (
 };
 
 export const useUserDateRangePreferenceRequest = ({
-    onSuccessCallback,
-}: {
+                                                      onSuccessCallback,
+                                                  }: {
     onSuccessCallback: () => void;
 }) => {
     const { getAccessTokenSilently } = useAuth0();

@@ -3,8 +3,11 @@ import { IoIosCheckmark } from 'react-icons/io';
 import { Guid } from 'guid-typescript';
 import { ShiftScheduleGrid } from './ScheduleAndShiftsCreationComponents/ShiftScheduleGrid.tsx';
 import { IoClose } from 'react-icons/io5';
-import { ShiftMetadata, AllShiftTypes } from './ScheduleAndShiftsCreationComponents/Types.ts';
+import { AllShiftTypes, ShiftMetadata } from './ScheduleAndShiftsCreationComponents/Types.ts';
 import { EditingShiftPane } from './ScheduleAndShiftsCreationComponents/EditingShiftPane.tsx';
+import { useChangeScheduleStatus } from '../apis.ts';
+import { ChangeShiftsScheduleStatusModel } from '@noadudai/scheduler-backend-client';
+import { ScheduleStatus } from '@noadudai/scheduler-backend-client/dist/api';
 
 type WeeklyShiftCreatorPanelProps = {
     onClose: () => void;
@@ -13,16 +16,18 @@ type WeeklyShiftCreatorPanelProps = {
     nextWeeksDayDates: Date[];
     onSubmitSchedule?: () => void;
     mode: 'edit' | 'view';
+    scheduleIdToPublish?: string;
 };
 
 const WeeklyShiftPanel = ({
-    onClose,
-    saveEditingShiftToSchedule,
-    shiftsSchedule,
-    nextWeeksDayDates,
-    onSubmitSchedule,
-    mode,
-}: WeeklyShiftCreatorPanelProps) => {
+                              onClose,
+                              saveEditingShiftToSchedule,
+                              shiftsSchedule,
+                              nextWeeksDayDates,
+                              onSubmitSchedule,
+                              mode,
+                              scheduleIdToPublish,
+                          }: WeeklyShiftCreatorPanelProps) => {
     const [editingShift, setEditingShift] = useState<ShiftMetadata | undefined>(undefined);
 
     const saveEditingShiftToScheduleCallBack = (
@@ -44,16 +49,31 @@ const WeeklyShiftPanel = ({
 
     const isEditMode = mode === 'edit';
 
+    const changeScheduleStatusMutation = useChangeScheduleStatus();
+
+    const publishSchedule = () => {
+        if (scheduleIdToPublish) {
+            const data: ChangeShiftsScheduleStatusModel = {
+                scheduleId: scheduleIdToPublish,
+                status: ScheduleStatus.Published,
+            };
+
+            changeScheduleStatusMutation.mutate(data);
+        }
+    };
+
     return (
         <div className="flex justify-evenly inset-0 bg-opacity-30 backdrop-blur-sm fixed items-center">
-            <div className="flex flex-col w-2/3 bg-white place-self-center items-center p-4 gap-2 border border-gray-200 rounded-lg">
+            <div
+                className="flex flex-col w-2/3 bg-white place-self-center items-center p-4 gap-2 border border-gray-200 rounded-lg">
                 <button
                     className="place-self-end bg-custom-pastel-green text-center text-custom-cream rounded-full p-1"
                     onClick={onClose}
                 >
                     <IoClose />{' '}
                 </button>
-                <div className="flex flex-col gap-2 font-opensans text-center bg-custom-cream-warm w-full p-2 h-full rounded-lg">
+                <div
+                    className="flex flex-col gap-2 font-opensans text-center bg-custom-cream-warm w-full p-2 h-full rounded-lg">
                     {isEditMode ? (
                         <h1 className="text-2xl">Create Shifts for next week</h1>
                     ) : (
@@ -72,7 +92,7 @@ const WeeklyShiftPanel = ({
                     setEditingShift={setEditingShift}
                     mode={mode}
                 />
-                {isEditMode && (
+                {isEditMode ? (
                     <button
                         className="bg-custom-pastel-green text-center text-custom-cream rounded-full disabled:bg-gray-300 disabled:text-gray-950"
                         disabled={onSubmitSchedule === undefined}
@@ -80,6 +100,15 @@ const WeeklyShiftPanel = ({
                     >
                         <IoIosCheckmark size={40} />
                     </button>
+                ) : (
+                    scheduleIdToPublish !== null && (
+                        <button
+                            onClick={publishSchedule}
+                            className="bg-custom-pastel-green text-center text-custom-cream rounded-full p-2 "
+                        >
+                            Publish
+                        </button>
+                    )
                 )}
                 {editingShift && (
                     <EditingShiftPane
