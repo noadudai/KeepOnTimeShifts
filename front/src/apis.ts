@@ -6,7 +6,11 @@ import {
 } from '@noadudai/scheduler-backend-client/api.ts';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth0 } from '@auth0/auth0-react';
-import { ChangeShiftsScheduleStatusModel, CreateNewScheduleModel } from '@noadudai/scheduler-backend-client';
+import {
+    ChangeShiftsScheduleStatusModel,
+    CreateNewScheduleModel,
+    ScheduleFetchingModel,
+} from '@noadudai/scheduler-backend-client';
 
 const ax = axios.create({
     baseURL: `${import.meta.env.VITE_BACKEND_BASE_URL}`,
@@ -58,17 +62,20 @@ export const useCreateNewShiftsSchedule = () => {
     });
 };
 
-export const useQueryAllSchedulesDescending = () => {
+export const useQueryAllSchedulesInOrder = (data: ScheduleFetchingModel) => {
     const { getAccessTokenSilently } = useAuth0();
     return useQuery({
-        queryKey: ['allSchedules'],
+        queryKey: ['allSchedules', data],
         queryFn: async () => {
             const token = await getAccessTokenSilently();
-            const response = await managerActionsApi.managerScheduleActionsSchedulesGet({
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await managerActionsApi.managerScheduleActionsSchedulesPost(
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
             return response.data;
         },
     });

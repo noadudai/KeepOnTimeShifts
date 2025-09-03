@@ -6,13 +6,14 @@ import {
     ShiftMetadata,
     ShiftMetadataWithEndDate,
 } from '../../components/ScheduleAndShiftsCreationComponents/Types.ts';
-import { useCreateNewShiftsSchedule, useQueryAllSchedulesDescending } from '../../apis.ts';
+import { useCreateNewShiftsSchedule, useQueryAllSchedulesInOrder } from '../../apis.ts';
 import { CreateNewScheduleModel, ScheduleStatus } from '@noadudai/scheduler-backend-client/dist/api';
 import { getNextWeeksDates } from '../../components/ScheduleAndShiftsCreationComponents/NextWeeksDates.ts';
 import {
     getScheduleInGivenDateRange,
 } from '../../components/ScheduleAndShiftsCreationComponents/ScheduleIsForNextWeekCheck.ts';
 import { DAYS } from '../../components/ScheduleAndShiftsCreationComponents/Days.ts';
+import { ScheduleFetchingModel } from '@noadudai/scheduler-backend-client';
 
 const Scheduling = () => {
     const nextWeeksDayDates: Date[] = getNextWeeksDates();
@@ -30,7 +31,9 @@ const Scheduling = () => {
     ).flat();
     const [shiftsSchedule, setShiftsSchedule] = useState<ShiftMetadata[]>(initialState);
 
-    const { data: schedulesResponse } = useQueryAllSchedulesDescending();
+    const scheduleOrder: ScheduleFetchingModel = { creationTimeOrder: 'Descending' };
+    const { data: schedulesResponse } = useQueryAllSchedulesInOrder(scheduleOrder);
+
     const schedules = schedulesResponse?.schedules ?? []; // the schedules from the api can be possibly null
     const ShiftsSchedules = schedules.map((schedule) => ({
         // the schedule's shifts from the api can be possibly null
